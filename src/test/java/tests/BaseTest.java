@@ -31,6 +31,7 @@ public abstract class BaseTest {
     public static PrintStream printStream;
     public static RequestSpecification testRequestSpecification;
     public static RequestSpecification invalidApiKeyCodeRequestSpecification;
+    public static RequestSpecification restrictedApiKeyCodeRequestSpecification;
     public static ResponseSpecification testResponseSpecification;
 
     private static final Map<String, String> API_HEADERS = new HashMap<>();
@@ -49,7 +50,17 @@ public abstract class BaseTest {
                 .setBasePath(SERVICE)
                 .addFilter(new AllureRestAssured())
                 .setContentType(ContentType.JSON)
-                .addHeader( "X-Api-Key", "INVALID")
+                .addHeader( "X-Api-Key", "abcd1XyZ")
+                .addHeader( "X-Customer-Code", API_HEADERS.get("X-Customer-Code"))
+                .log(LogDetail.BODY)
+                .build();
+
+        restrictedApiKeyCodeRequestSpecification = new RequestSpecBuilder()
+                .setBaseUri(HOST)
+                .setBasePath(SERVICE)
+                .addFilter(new AllureRestAssured())
+                .setContentType(ContentType.JSON)
+                .addHeader( "X-Api-Key", TEAM_X_API_KEY)
                 .addHeader( "X-Customer-Code", API_HEADERS.get("X-Customer-Code"))
                 .log(LogDetail.BODY)
                 .build();

@@ -80,18 +80,35 @@ public class JbLicensesAssignNegativeTest extends BaseTest {
 
 
     @Story("Testing POST /api/v1/customer/licenses/assign")
-    @Description("Testing API: validate response with invalid X-Api-Key header")
+    @Description("Testing API: validate response with invalid X-Api-Key header - 401 response")
     @Test()
-    public void verifyResponseForInvalidXApiKeyHeaderTest() {
+    public void verifyResponse401ForInvalidXApiKeyHeaderTest() {
         LicensesAssignObject license = LicensesAssignObject.builder()
                 .licenseId(EXPIRED_LICENSE_ID)
                 .contact(Contact.builder()
                         .build())
                 .build();
 
-        Response response = extractApiResponseWithInvalidApiKeyCodeHeader(license, ASSIGN_LICENSE);
+        Response response = extractApiResponseWithInvalidApiKeyCodeHeader(license, ASSIGN_LICENSE,
+                invalidApiKeyCodeRequestSpecification);
 
         assertResponseBody(response, CODE_401.CODE, CODE_MSG4, DESCRIPTION_MSG4);
+    }
+
+    @Story("Testing POST /api/v1/customer/licenses/assign")
+    @Description("Testing API: validate response with restricted X-Api-Key header - 403 response")
+    @Test()
+    public void verifyResponse403ForInvalidXApiKeyHeaderTest() {
+        LicensesAssignObject license = LicensesAssignObject.builder()
+                .licenseId(EXPIRED_LICENSE_ID)
+                .contact(Contact.builder()
+                        .build())
+                .build();
+
+        Response response = extractApiResponseWithInvalidApiKeyCodeHeader(license, ASSIGN_LICENSE,
+                restrictedApiKeyCodeRequestSpecification);
+
+        assertResponseBody(response, CODE_403.CODE, CODE_MSG5, DESCRIPTION_MSG5);
     }
 
 

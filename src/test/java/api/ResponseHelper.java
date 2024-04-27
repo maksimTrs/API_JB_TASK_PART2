@@ -4,6 +4,7 @@ import io.restassured.filter.log.LogDetail;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.response.Response;
+import io.restassured.specification.RequestSpecification;
 
 import static io.restassured.RestAssured.given;
 import static tests.BaseTest.*;
@@ -25,9 +26,10 @@ public class ResponseHelper {
     }
 
 
-    public static Response extractApiResponseWithInvalidApiKeyCodeHeader(Object requestBody, String endPointUrl) {
+    public static Response extractApiResponseWithInvalidApiKeyCodeHeader(Object requestBody, String endPointUrl,
+                                                                         RequestSpecification specWithInvalidApiKey) {
         return given()
-                .spec(invalidApiKeyCodeRequestSpecification)
+                .spec(specWithInvalidApiKey)
                 .filter(new RequestLoggingFilter(LogDetail.URI, printStream))
                 .filter(new ResponseLoggingFilter(LogDetail.ALL, printStream))
                 .body(requestBody)
