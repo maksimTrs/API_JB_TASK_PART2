@@ -11,6 +11,12 @@ public class AssertionHelper {
         assertThat(response.getBody().asString()).isEmpty();
     }
 
+    public static void assertResponseStatusCodeAndContentType(Response response, int expectedStatusCode,
+                                                              String contentType) {
+        assertThat(response.statusCode()).isEqualTo(expectedStatusCode);
+        assertThat(response.getHeader("Content-Type")).contains(contentType);
+    }
+
     public static void assertResponseBody(Response response, int expectedStatusCode,
                                           String codeMessage, String descriptionMessage) {
         assertThat(response.statusCode()).isEqualTo(expectedStatusCode);

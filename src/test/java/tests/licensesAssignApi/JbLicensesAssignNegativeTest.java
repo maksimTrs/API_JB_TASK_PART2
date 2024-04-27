@@ -17,7 +17,7 @@ import static api.ResponseHelper.extractApiResponseWithInvalidApiKeyCodeHeader;
 import static enums.ApiResponseValuesEnum.*;
 import static enums.StatusCodeEnum.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static utils.AssertionHelper.assertResponseBody;
+import static utils.AssertionHelper.*;
 import static utils.AuthorCommentsToTests.*;
 import static utils.PropertyReader.getPropertyFromBundle;
 
@@ -143,14 +143,40 @@ public class JbLicensesAssignNegativeTest extends BaseTest {
 
         Response response = extractApiResponse(licenseApiModel, ASSIGN_LICENSE);
 
-        assertThat(response.statusCode()).isEqualTo(CODE_400.CODE);
+
         /* I presume we hava an API design validation issue here - instead of JSON response structure as we have
          *  for another negative tests
          *  assertResponseBody(response, CODE_400.CODE, MISSING_FIELD.getCode(), MISSING_FIELD.getDescription());
          *  we are getting HTML response structure
          * */
         Allure.addAttachment("COMMENT FOR TEST", COMMENT_1);
-        assertThat(response.getHeader("Content-Type")).contains("application/json");
+        assertResponseStatusCodeAndContentType(response, CODE_400.CODE, "application/json");
+    }
+
+
+    @Story("Testing POST /api/v1/customer/licenses/assign")
+    @Description("Testing API: validate response without request license.productCode field")
+    @Test()
+    public void verifyResponseWithoutLicenseProductCodeFieldTest() {
+        LicensesAssignObject licenseApiModel = LicensesAssignObject.builder()
+                .license(License.builder()
+                .productCode(null)
+                .team(TEAM002_ID_CODE)
+                .build())
+                .contact(Contact.builder()
+                        .build())
+                .build();
+
+        Response response = extractApiResponse(licenseApiModel, ASSIGN_LICENSE);
+
+
+        /* I presume we hava an API design validation issue here - instead of JSON response structure as we have
+         *  for another negative tests
+         *  assertResponseBody(response, CODE_400.CODE, MISSING_FIELD.getCode(), MISSING_FIELD.getDescription());
+         *  we are getting HTML response structure
+         * */
+        Allure.addAttachment("COMMENT FOR TEST", COMMENT_1);
+        assertResponseStatusCodeAndContentType(response, CODE_400.CODE, "application/json");
     }
 
 
@@ -174,7 +200,7 @@ public class JbLicensesAssignNegativeTest extends BaseTest {
          *   https://account.jetbrains.com/api-doc#/Licenses/assignLicense
          * */
         Allure.addAttachment("COMMENT FOR TEST", COMMENT_2);
-        assertThat(response.statusCode()).isEqualTo(CODE_400.CODE);
+        assertResponseStatusCodeAndEmptyBody(response, CODE_400.CODE);
     }
 
     @Story("Testing POST /api/v1/customer/licenses/assign")
@@ -198,6 +224,6 @@ public class JbLicensesAssignNegativeTest extends BaseTest {
          *   https://account.jetbrains.com/api-doc#/Licenses/assignLicense
          * */
         Allure.addAttachment("COMMENT FOR TEST", COMMENT_3);
-        assertThat(response.statusCode()).isEqualTo(CODE_400.CODE);
+        assertResponseStatusCodeAndEmptyBody(response, CODE_400.CODE);
     }
 }
