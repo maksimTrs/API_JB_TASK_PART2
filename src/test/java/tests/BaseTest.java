@@ -44,26 +44,8 @@ public abstract class BaseTest {
         API_HEADERS.put("X-Customer-Code", X_CUSTOMER_CODE);
         API_HEADERS.put("X-Api-Key", X_API_KEY);
 
-
-        invalidApiKeyCodeRequestSpecification = new RequestSpecBuilder()
-                .setBaseUri(HOST)
-                .setBasePath(SERVICE)
-                .addFilter(new AllureRestAssured())
-                .setContentType(ContentType.JSON)
-                .addHeader( "X-Api-Key", "abcd1XyZ")
-                .addHeader( "X-Customer-Code", API_HEADERS.get("X-Customer-Code"))
-                .log(LogDetail.BODY)
-                .build();
-
-        restrictedApiKeyCodeRequestSpecification = new RequestSpecBuilder()
-                .setBaseUri(HOST)
-                .setBasePath(SERVICE)
-                .addFilter(new AllureRestAssured())
-                .setContentType(ContentType.JSON)
-                .addHeader( "X-Api-Key", TEAM_X_API_KEY)
-                .addHeader( "X-Customer-Code", API_HEADERS.get("X-Customer-Code"))
-                .log(LogDetail.BODY)
-                .build();
+        invalidApiKeyCodeRequestSpecification = createRequestSpecificationWithInvalidXApiKey("abcd1XyZ");
+        restrictedApiKeyCodeRequestSpecification = createRequestSpecificationWithInvalidXApiKey(TEAM_X_API_KEY);
     }
 
 
@@ -101,5 +83,18 @@ public abstract class BaseTest {
         logger.info("********************************************************************************");
         logger.info("TEST FINISHED: " + m.getName());
         logger.info("********************************************************************************");
+    }
+
+
+    private RequestSpecification createRequestSpecificationWithInvalidXApiKey(String apiKeyValue) {
+        return new RequestSpecBuilder()
+                .setBaseUri(HOST)
+                .setBasePath(SERVICE)
+                .addFilter(new AllureRestAssured())
+                .setContentType(ContentType.JSON)
+                .addHeader("X-Api-Key", apiKeyValue)
+                .addHeader("X-Customer-Code", API_HEADERS.get("X-Customer-Code"))
+                .log(LogDetail.BODY)
+                .build();
     }
 }
