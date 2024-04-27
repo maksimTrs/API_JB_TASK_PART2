@@ -2,6 +2,7 @@ package tests.licensesAssignApi;
 
 
 import enums.ApiResponseValuesEnum;
+import io.qameta.allure.Allure;
 import io.qameta.allure.Description;
 import io.qameta.allure.Story;
 import io.restassured.response.Response;
@@ -18,6 +19,7 @@ import static utils.AssertionHelper.assertResponseBody;
 import static utils.AssertionHelper.assertResponseStatusCodeAndEmptyBody;
 import static api.ResponseHelper.*;
 import static enums.StatusCodeEnum.*;
+import static utils.AuthorCommentsToTests.*;
 import static utils.PropertyReader.getLicenseFromBundle;
 
 
@@ -132,6 +134,7 @@ public class JbLicensesAssignNegativeTest extends BaseTest {
          *  assertResponseBody(response, CODE_400.CODE, MISSING_FIELD.getCode(), MISSING_FIELD.getDescription());
          *  we are getting HTML response structure
          * */
+        Allure.addAttachment("COMMENT FOR TEST", COMMENT_1);
         assertThat(response.getHeader("Content-Type")).contains("application/json");
     }
 
@@ -155,6 +158,7 @@ public class JbLicensesAssignNegativeTest extends BaseTest {
          *   but API does not require to send "sendEmail" field - it is optional
          *   https://account.jetbrains.com/api-doc#/Licenses/assignLicense
          * */
+        Allure.addAttachment("COMMENT FOR TEST", COMMENT_2);
         assertThat(response.statusCode()).isEqualTo(CODE_400.CODE);
     }
 
@@ -178,6 +182,7 @@ public class JbLicensesAssignNegativeTest extends BaseTest {
          *   but API does not require to send "includeOfflineActivationCode" field - it is optional
          *   https://account.jetbrains.com/api-doc#/Licenses/assignLicense
          * */
+        Allure.addAttachment("COMMENT FOR TEST", COMMENT_3);
         assertThat(response.statusCode()).isEqualTo(CODE_400.CODE);
     }
 
