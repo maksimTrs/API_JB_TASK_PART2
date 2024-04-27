@@ -6,15 +6,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class AssertionHelper {
 
-    public static void assertResponseStatusCodeAndBodyPresence(Response response,
-                                                               int expectedStatusCode,
-                                                               boolean isBodyPresent) {
+    public static void assertResponseStatusCodeAndEmptyBody(Response response, int expectedStatusCode) {
         assertThat(response.statusCode()).isEqualTo(expectedStatusCode);
-        if (isBodyPresent) {
-            assertThat(response.body()).isNotNull();
-        } else {
-            assertThat(response.body()).isNull();
-        }
+        assertThat(response.getBody().asString()).isEmpty();
     }
 
     public static void assertResponseBody(Response response, int expectedStatusCode,

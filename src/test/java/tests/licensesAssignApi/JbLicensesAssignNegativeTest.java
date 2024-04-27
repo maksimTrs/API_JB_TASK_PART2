@@ -13,8 +13,7 @@ import tests.BaseTest;
 import static org.assertj.core.api.Assertions.assertThat;
 import static api.ApiConstants.*;
 import static utils.AssertionHelper.assertResponseBody;
-import static utils.AssertionHelper.assertResponseStatusCodeAndBodyPresence;
-import static utils.MockHelper.mockResponse;
+import static utils.AssertionHelper.assertResponseStatusCodeAndEmptyBody;
 import static api.ResponseHelper.*;
 import static enums.StatusCodeEnum.*;
 
@@ -31,7 +30,7 @@ public class JbLicensesAssignNegativeTest extends BaseTest {
                 .licenseId(EXPIRED_LICENSE_ID)
                 .license(License.builder()
                         .productCode("ALL")
-                        .team(2)
+                        .team(1)
                         .build())
                 .contact(Contact.builder()
                         .build())
@@ -49,7 +48,7 @@ public class JbLicensesAssignNegativeTest extends BaseTest {
         LicensesAssignObject license = LicensesAssignObject.builder()
                 .license(License.builder()
                         .productCode(LICENSE_PRODUCT_CODE)
-                        .team(LICENSE_TEAM_ID)
+                        .team(1)
                         .build())
                 .contact(Contact.builder()
                         .build())
@@ -112,15 +111,6 @@ public class JbLicensesAssignNegativeTest extends BaseTest {
     }
 
 
-    @Story("Testing POST /api/v1/customer/licenses/assign")
-    @Description("Testing API: validate response with 403 response - team X-Api-Key value in the Header")
-    @Test()
-    public void verifyResponse403StatusTest() {
-        Response response = mockResponse(CODE_403.CODE);
-
-        assertResponseStatusCodeAndBodyPresence(response, CODE_403.CODE, false);
-    }
-
 
     @Story("Testing POST /api/v1/customer/licenses/assign")
     @Description("Testing API: validate response without request contact partition")
@@ -130,12 +120,13 @@ public class JbLicensesAssignNegativeTest extends BaseTest {
                 .licenseId(EXPIRED_LICENSE_ID)
                 .license(License.builder()
                         .productCode(LICENSE_PRODUCT_CODE)
-                        .team(LICENSE_TEAM_ID)
+                        .team(1)
                         .build())
                 .build();
 
         Response response = extractApiResponse(license, ASSIGN_LICENSE);
 
-        assertResponseStatusCodeAndBodyPresence(response, CODE_400.CODE, true);
+        assertThat(response.statusCode()).isEqualTo(CODE_400.CODE);
+        assertThat(response.getHeader("Content-Type")).contains("application/json");
     }
 }
