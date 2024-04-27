@@ -29,13 +29,13 @@ public class JbLicensesAssignPositiveTest extends BaseTest {
     @Description("Testing API: Payload with 'licenseId' and without 'license' partitions")
     @Test()
     public void verifyAssignLicenseApiWithoutLicenseSectionTest() {
-        LicensesAssignObject license = LicensesAssignObject.builder()
+        LicensesAssignObject licenseApiModel = LicensesAssignObject.builder()
                 .licenseId(Team002_LICENSE_1_ID)
                 .contact(Contact.builder()
                         .build())
                 .build();
 
-        Response response = extractApiResponse(license, ASSIGN_LICENSE);
+        Response response = extractApiResponse(licenseApiModel, ASSIGN_LICENSE);
 
         assertResponseStatusCodeAndEmptyBody(response, CODE_200.CODE);
     }
@@ -45,8 +45,7 @@ public class JbLicensesAssignPositiveTest extends BaseTest {
     @Description("Testing API: Payload without 'licenseId' and with 'license' partitions")
     @Test()
     public void verifyAssignLicenseApiWithoutLicenseIdFieldTest() {
-
-        LicensesAssignObject license = LicensesAssignObject.builder()
+        LicensesAssignObject licenseApiModel = LicensesAssignObject.builder()
                 .license(License.builder()
                         .productCode(TEAM001_ACTIVE_PRODUCT_CODE)
                         .team(TEAM001_ID_CODE)
@@ -55,7 +54,7 @@ public class JbLicensesAssignPositiveTest extends BaseTest {
                         .build())
                 .build();
 
-        Response response = extractApiResponse(license, ASSIGN_LICENSE);
+        Response response = extractApiResponse(licenseApiModel, ASSIGN_LICENSE);
 
         assertResponseStatusCodeAndEmptyBody(response, CODE_200.CODE);
     }
@@ -65,8 +64,7 @@ public class JbLicensesAssignPositiveTest extends BaseTest {
     @Description("Testing API: Payload with 'licenseId' and with 'license' partitions")
     @Test()
     public void verifyAssignLicenseApiWithLicenseIdAndLicenseSectionsTest() {
-
-        LicensesAssignObject license = LicensesAssignObject.builder()
+        LicensesAssignObject licenseApiModel = LicensesAssignObject.builder()
                 .licenseId(Team002_LICENSE_2_ID)
                 .license(License.builder()
                         .productCode(TEAM001_ACTIVE_PRODUCT_CODE)
@@ -76,7 +74,7 @@ public class JbLicensesAssignPositiveTest extends BaseTest {
                         .build())
                 .build();
 
-        Response response = extractApiResponse(license, ASSIGN_LICENSE);
+        Response response = extractApiResponse(licenseApiModel, ASSIGN_LICENSE);
 
         assertResponseStatusCodeAndEmptyBody(response, CODE_200.CODE);
     }

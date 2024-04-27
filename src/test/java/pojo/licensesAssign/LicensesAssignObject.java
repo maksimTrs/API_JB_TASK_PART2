@@ -15,9 +15,9 @@ import lombok.extern.jackson.Jacksonized;
 public class LicensesAssignObject {
 	private License license;
 	@Builder.Default
-	private boolean sendEmail = false;
+	private Boolean sendEmail = false;
 	@Builder.Default
-	private boolean includeOfflineActivationCode = false;
+	private Boolean includeOfflineActivationCode = false;
 	private Contact contact;
 	private String licenseId;
 }

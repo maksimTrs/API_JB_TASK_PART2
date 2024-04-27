@@ -1,6 +1,7 @@
 package tests.licensesAssignApi;
 
 
+import enums.ApiResponseValuesEnum;
 import io.qameta.allure.Description;
 import io.qameta.allure.Story;
 import io.restassured.response.Response;
@@ -10,123 +11,194 @@ import pojo.licensesAssign.License;
 import pojo.licensesAssign.LicensesAssignObject;
 import tests.BaseTest;
 
+import static enums.ApiResponseValuesEnum.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static api.ApiConstants.*;
 import static utils.AssertionHelper.assertResponseBody;
 import static utils.AssertionHelper.assertResponseStatusCodeAndEmptyBody;
 import static api.ResponseHelper.*;
 import static enums.StatusCodeEnum.*;
+import static utils.PropertyReader.getLicenseFromBundle;
 
 
 public class JbLicensesAssignNegativeTest extends BaseTest {
 
+    private static final String Team002_LICENSE_3_ID = getLicenseFromBundle("WebStormLicenseID_Team002_3");
+    private static final String Team002_LICENSE_4_ID = getLicenseFromBundle("WebStormLicenseID_Team002_4");
+    private static final String Team002_INVALID_LICENSE_ID = getLicenseFromBundle("Invalid_LicenseID_Team002_1");
 
     @Story("Testing POST /api/v1/customer/licenses/assign")
     @Description("Testing API: validate expired licenseId")
     @Test()
     public void verifyExpiredLicenseTest() {
-
-        LicensesAssignObject license = LicensesAssignObject.builder()
-                .licenseId(EXPIRED_LICENSE_ID)
+        LicensesAssignObject licenseApiModel = LicensesAssignObject.builder()
+                .licenseId(Team002_INVALID_LICENSE_ID)
                 .license(License.builder()
-                        .productCode("ALL")
-                        .team(1)
+                        .productCode(TEAM001_ACTIVE_PRODUCT_CODE)
+                        .team(TEAM001_ID_CODE)
                         .build())
                 .contact(Contact.builder()
                         .build())
                 .build();
 
-        Response response = extractApiResponse(license, ASSIGN_LICENSE);
+        Response response = extractApiResponse(licenseApiModel, ASSIGN_LICENSE);
 
-        assertResponseBody(response, CODE_400.CODE, CODE_MSG, DESCRIPTION_MSG);
+        assertResponseBody(response, CODE_400.CODE, LICENSE_IS_NOT_AVAILABLE_TO_ASSIGN.getCode(),
+                LICENSE_IS_NOT_AVAILABLE_TO_ASSIGN.getDescription());
     }
 
     @Story("Testing POST /api/v1/customer/licenses/assign")
-    @Description("Testing API: validate empty licences for team product")
+    @Description("Testing API: validate non-existent licenses for the team per product")
     @Test()
     public void verifyEmptyAvailableLicenseForTeamProductTest() {
-        LicensesAssignObject license = LicensesAssignObject.builder()
+        LicensesAssignObject licenseApiModel = LicensesAssignObject.builder()
                 .license(License.builder()
-                        .productCode(LICENSE_PRODUCT_CODE)
-                        .team(1)
+                        .productCode(TEAM002_INACTIVE_PRODUCT_CODE)
+                        .team(TEAM002_ID_CODE)
                         .build())
                 .contact(Contact.builder()
                         .build())
                 .build();
 
-        Response response = extractApiResponse(license, ASSIGN_LICENSE);
+        Response response = extractApiResponse(licenseApiModel, ASSIGN_LICENSE);
 
-        String testDescriptionMsg = String.format(DESCRIPTION_MSG2, license.getLicense().getTeam(),
-                license.getLicense().getProductCode());
-        assertResponseBody(response, CODE_400.CODE, CODE_MSG2, testDescriptionMsg);
+        assertResponseBody(response, CODE_400.CODE, NO_AVAILABLE_LICENSE_TO_ASSIGN.getCode(),
+                getDescription(NO_AVAILABLE_LICENSE_TO_ASSIGN.getDescription(),
+                        licenseApiModel.getLicense().getTeam(), licenseApiModel.getLicense().getProductCode()));
     }
 
 
     @Story("Testing POST /api/v1/customer/licenses/assign")
-    @Description("Testing API: validate response for missed  licenseId and license partitions")
+    @Description("Testing API: validate response for missed licenseId and license partitions")
     @Test()
     public void verifyResponseForMissedLicenseIdAndLicensePartitionsTest() {
-        LicensesAssignObject license = LicensesAssignObject.builder()
+        LicensesAssignObject licenseApiModel = LicensesAssignObject.builder()
                 .contact(Contact.builder()
                         .build())
                 .build();
 
-        Response response = extractApiResponse(license, ASSIGN_LICENSE);
+        Response response = extractApiResponse(licenseApiModel, ASSIGN_LICENSE);
 
-        assertResponseBody(response, CODE_400.CODE, CODE_MSG3, DESCRIPTION_MSG3);
+        assertResponseBody(response, CODE_400.CODE, MISSING_FIELD.getCode(), MISSING_FIELD.getDescription());
     }
-
 
 
     @Story("Testing POST /api/v1/customer/licenses/assign")
     @Description("Testing API: validate response with invalid X-Api-Key header - 401 response")
     @Test()
     public void verifyResponse401ForInvalidXApiKeyHeaderTest() {
-        LicensesAssignObject license = LicensesAssignObject.builder()
-                .licenseId(EXPIRED_LICENSE_ID)
+        LicensesAssignObject licenseApiModel = LicensesAssignObject.builder()
+                .licenseId(Team002_INVALID_LICENSE_ID)
                 .contact(Contact.builder()
                         .build())
                 .build();
 
-        Response response = extractApiResponseWithInvalidApiKeyCodeHeader(license, ASSIGN_LICENSE,
+        Response response = extractApiResponseWithInvalidApiKeyCodeHeader(licenseApiModel, ASSIGN_LICENSE,
                 invalidApiKeyCodeRequestSpecification);
 
-        assertResponseBody(response, CODE_401.CODE, CODE_MSG4, DESCRIPTION_MSG4);
+        assertResponseBody(response, CODE_401.CODE, INVALID_TOKEN.getCode(), INVALID_TOKEN.getDescription());
     }
 
     @Story("Testing POST /api/v1/customer/licenses/assign")
     @Description("Testing API: validate response with restricted X-Api-Key header - 403 response")
     @Test()
     public void verifyResponse403ForInvalidXApiKeyHeaderTest() {
-        LicensesAssignObject license = LicensesAssignObject.builder()
-                .licenseId(EXPIRED_LICENSE_ID)
+        LicensesAssignObject licenseApiModel = LicensesAssignObject.builder()
+                .licenseId(Team002_INVALID_LICENSE_ID)
                 .contact(Contact.builder()
                         .build())
                 .build();
 
-        Response response = extractApiResponseWithInvalidApiKeyCodeHeader(license, ASSIGN_LICENSE,
+        Response response = extractApiResponseWithInvalidApiKeyCodeHeader(licenseApiModel, ASSIGN_LICENSE,
                 restrictedApiKeyCodeRequestSpecification);
 
-        assertResponseBody(response, CODE_403.CODE, CODE_MSG5, DESCRIPTION_MSG5);
+        assertResponseBody(response, CODE_403.CODE, TEAM_MISMATCH.getCode(), TEAM_MISMATCH.getDescription());
     }
-
 
 
     @Story("Testing POST /api/v1/customer/licenses/assign")
     @Description("Testing API: validate response without request contact partition")
     @Test()
     public void verifyResponseWithoutContactSectionTest() {
-        LicensesAssignObject license = LicensesAssignObject.builder()
-                .licenseId(EXPIRED_LICENSE_ID)
+        LicensesAssignObject licenseApiModel = LicensesAssignObject.builder()
+                .licenseId(Team002_INVALID_LICENSE_ID)
+                .build();
+
+        Response response = extractApiResponse(licenseApiModel, ASSIGN_LICENSE);
+
+        assertThat(response.statusCode()).isEqualTo(CODE_400.CODE);
+        /* I presume we hava an API design validation issue here - instead of JSON response structure as we have
+         *  for another negative tests
+         *  assertResponseBody(response, CODE_400.CODE, MISSING_FIELD.getCode(), MISSING_FIELD.getDescription());
+         *  we are getting HTML response structure
+         * */
+        assertThat(response.getHeader("Content-Type")).contains("application/json");
+    }
+
+
+    @Story("Testing POST /api/v1/customer/licenses/assign")
+    @Description("Testing API: Payload without mandatory 'sendEmail' field")
+    @Test()
+    public void verifyResponseWithoutSendEmailPayloadFieldTest() {
+        LicensesAssignObject licenseApiModel = LicensesAssignObject.builder()
+                .licenseId(Team002_LICENSE_3_ID)
+                .contact(Contact.builder()
+                        .build())
+                .sendEmail(null)
+                .includeOfflineActivationCode(false)
+                .build();
+
+        Response response = extractApiResponse(licenseApiModel, ASSIGN_LICENSE);
+
+        /* I presume we hava an API design  issue here - AssignLicenseRequest body schema validation
+         *   requires to have "sendEmail" field: "sendEmail*" marked as mandatory with red star "*" symbol
+         *   but API does not require to send "sendEmail" field - it is optional
+         *   https://account.jetbrains.com/api-doc#/Licenses/assignLicense
+         * */
+        assertThat(response.statusCode()).isEqualTo(CODE_400.CODE);
+    }
+
+    @Story("Testing POST /api/v1/customer/licenses/assign")
+    @Description("Testing API: Payload without mandatory 'includeOfflineActivationCode' field")
+    @Test()
+    public void verifyResponseWithoutIncludeOfflineActivationCodePayloadFieldTest() {
+        LicensesAssignObject licenseApiModel = LicensesAssignObject.builder()
+                .licenseId(Team002_LICENSE_4_ID)
+                .contact(Contact.builder()
+                        .build())
+                .sendEmail(false)
+                .includeOfflineActivationCode(null)
+                .build();
+
+        Response response = extractApiResponse(licenseApiModel, ASSIGN_LICENSE);
+
+        /* I presume we hava an API design  issue here - AssignLicenseRequest body schema validation
+         *   requires to have "includeOfflineActivationCode" field: "includeOfflineActivationCode*" marked as
+         *   mandatory with red star "*" symbol
+         *   but API does not require to send "includeOfflineActivationCode" field - it is optional
+         *   https://account.jetbrains.com/api-doc#/Licenses/assignLicense
+         * */
+        assertThat(response.statusCode()).isEqualTo(CODE_400.CODE);
+    }
+
+
+    @Story("Testing POST /api/v1/customer/licenses/assign")
+    @Description("Testing API: validate response with payload dummy team id")
+    @Test()
+    public void verifyResponse404WithInvalidTeamIdTest() {
+        LicensesAssignObject licenseApiModel = LicensesAssignObject.builder()
                 .license(License.builder()
-                        .productCode(LICENSE_PRODUCT_CODE)
-                        .team(1)
+                        .productCode(TEAM002_INACTIVE_PRODUCT_CODE)
+                        .team(0)
+                        .build())
+                .contact(Contact.builder()
                         .build())
                 .build();
 
-        Response response = extractApiResponse(license, ASSIGN_LICENSE);
+        Response response = extractApiResponse(licenseApiModel, ASSIGN_LICENSE);
 
-        assertThat(response.statusCode()).isEqualTo(CODE_400.CODE);
-        assertThat(response.getHeader("Content-Type")).contains("application/json");
+        assertResponseBody(response, CODE_404.CODE, TEAM_NOT_FOUND.getCode(),
+                getDescription(TEAM_NOT_FOUND.getDescription(),
+                        licenseApiModel.getLicense().getTeam(), ""));
     }
 }
