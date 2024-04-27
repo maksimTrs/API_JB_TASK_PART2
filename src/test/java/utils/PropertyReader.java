@@ -3,8 +3,7 @@ package utils;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.PropertyResourceBundle;
-import java.util.ResourceBundle;
+import java.util.*;
 
 public class PropertyReader {
 
@@ -29,5 +28,10 @@ public class PropertyReader {
 
     public static String getPropertyFromBundle(String prop) {
         return RESOURCE_BUNDLE.getString(prop);
+    }
+
+    public static List<String> getLicenseListFromBundle(String prop) {
+        String licensesString = RESOURCE_BUNDLE.getString(prop);
+        return Arrays.asList(licensesString.split(","));
     }
 }

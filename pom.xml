@@ -13,22 +13,21 @@
         <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <rest.assured.ver>5.3.0</rest.assured.ver>
-        <testng.ver>7.7.0</testng.ver>
-        <assertj.ver>3.21.0</assertj.ver>
+        <rest.assured.ver>5.3.2</rest.assured.ver>
+        <testng.ver>7.8.0</testng.ver>
+        <assertj.ver>3.25.3</assertj.ver>
         <gson.ver>2.9.1</gson.ver>
         <jackson.ver>2.12.4</jackson.ver>
-        <lombok.ver>1.18.22</lombok.ver>
+        <lombok.ver>1.18.30</lombok.ver>
         <hamkrest.ver>1.3</hamkrest.ver>
         <json.schema.validator.ver>4.3.3</json.schema.validator.ver>
         <json.ver>20231013</json.ver>
         <maven.compiler.ver>3.8.1</maven.compiler.ver>
         <slf4j.simple.ver>1.7.5</slf4j.simple.ver>
-        <podam.ver>7.2.7.RELEASE</podam.ver>
-        <allure.testng.ver>2.17.2</allure.testng.ver>
-        <aspectj.version>1.9.6</aspectj.version>
-        <allure.rest.assured.ver>2.17.2</allure.rest.assured.ver>
-        <allure.assertj.ver>2.17.3</allure.assertj.ver>
+        <allure.testng.ver>2.23.0</allure.testng.ver>
+        <aspectj.version>1.9.8</aspectj.version>
+        <allure.rest.assured.ver>2.23.0</allure.rest.assured.ver>
+        <allure.assertj.ver>2.23.0</allure.assertj.ver>
     </properties>
 
     <dependencies>
@@ -79,12 +78,6 @@
             <version>${json.ver}</version>
         </dependency>
         <dependency>
-            <groupId>uk.co.jemos.podam</groupId>
-            <artifactId>podam</artifactId>
-            <version>${podam.ver}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>io.qameta.allure</groupId>
             <artifactId>allure-testng</artifactId>
             <version>${allure.testng.ver}</version>
@@ -126,18 +119,6 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
             <version>2.0.6</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>com.github.tomakehurst</groupId>
-            <artifactId>wiremock-jre8</artifactId>
-            <version>3.0.1</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-core</artifactId>
-            <version>3.11.2</version>
             <scope>test</scope>
         </dependency>
         <dependency>
@@ -192,7 +173,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>3.0.0-M5</version>
+                <version>3.0.0</version>
                 <configuration>
                     <testFailureIgnore>true</testFailureIgnore>
                     <argLine>

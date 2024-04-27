@@ -2,6 +2,8 @@ package utils;
 
 import io.restassured.response.Response;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AssertionHelper {
@@ -24,5 +26,18 @@ public class AssertionHelper {
                 .isEqualTo(codeMessage);
         assertThat(response.jsonPath().get("description").toString())
                 .isEqualTo(descriptionMessage);
+    }
+
+    public static void assertLicenseIdsResponseBody(Response response, int expectedStatusCode, List<String> expectedLicenseIds) {
+        assertThat(response.statusCode()).isEqualTo(expectedStatusCode);
+        // Get the "licenseIds" value as a List
+        List<String> actualLicenseIds = response.jsonPath().getList("licenseIds", String.class);
+        // Check if the list is null or empty
+        if (expectedLicenseIds.isEmpty()) {
+            assertThat(actualLicenseIds).isEmpty();
+        } else {
+            // Compare the actual list with the expected list
+            assertThat(actualLicenseIds).containsExactlyInAnyOrderElementsOf(expectedLicenseIds);
+        }
     }
 }
