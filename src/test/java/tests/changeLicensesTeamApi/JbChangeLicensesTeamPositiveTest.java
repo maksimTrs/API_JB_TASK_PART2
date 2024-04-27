@@ -21,7 +21,7 @@ import static utils.PropertyReader.getLicenseListFromBundle;
 public class JbChangeLicensesTeamPositiveTest extends BaseTest {
 
     private static final List<String> LICENSE_LIST = getLicenseListFromBundle("DataGripLicenseListIDs");
-    private static final String FIRST_LICENSE = LICENSE_LIST.get(0);
+    private static final List<String> FIRST_LICENSE = List.of(LICENSE_LIST.get(0));
     private final List<String> LICENSE_EMPTY_LIST = List.of();
 
 
@@ -37,11 +37,11 @@ public class JbChangeLicensesTeamPositiveTest extends BaseTest {
     public void verifyChangeSingleLicenseTest() {
         ChangeLicensesTeamObject changeLicensesTeamObject = ChangeLicensesTeamObject.builder()
                 .targetTeamId(TEAM001_ID_CODE)
-                .licenseIds(List.of(FIRST_LICENSE))
+                .licenseIds(FIRST_LICENSE)
                 .build();
 
         Response response = extractApiResponse(changeLicensesTeamObject, CHANGE_LICENSE);
-        assertLicenseIdsResponseBody(response, CODE_200.CODE, List.of(FIRST_LICENSE));
+        assertLicenseIdsResponseBody(response, CODE_200.CODE, FIRST_LICENSE);
     }
 
     @Story("Testing POST api/v1/customer/changeLicensesTeam")
