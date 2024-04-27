@@ -1,7 +1,6 @@
 package tests.licensesAssignApi;
 
 
-import enums.ApiResponseValuesEnum;
 import io.qameta.allure.Allure;
 import io.qameta.allure.Description;
 import io.qameta.allure.Story;
@@ -16,7 +15,6 @@ import static enums.ApiResponseValuesEnum.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static api.ApiConstants.*;
 import static utils.AssertionHelper.assertResponseBody;
-import static utils.AssertionHelper.assertResponseStatusCodeAndEmptyBody;
 import static api.ResponseHelper.*;
 import static enums.StatusCodeEnum.*;
 import static utils.AuthorCommentsToTests.*;
@@ -35,10 +33,6 @@ public class JbLicensesAssignNegativeTest extends BaseTest {
     public void verifyExpiredLicenseTest() {
         LicensesAssignObject licenseApiModel = LicensesAssignObject.builder()
                 .licenseId(Team002_INVALID_LICENSE_ID)
-                .license(License.builder()
-                        .productCode(TEAM001_ACTIVE_PRODUCT_CODE)
-                        .team(TEAM001_ID_CODE)
-                        .build())
                 .contact(Contact.builder()
                         .build())
                 .build();
@@ -55,7 +49,7 @@ public class JbLicensesAssignNegativeTest extends BaseTest {
     public void verifyEmptyAvailableLicenseForTeamProductTest() {
         LicensesAssignObject licenseApiModel = LicensesAssignObject.builder()
                 .license(License.builder()
-                        .productCode(TEAM002_INACTIVE_PRODUCT_CODE)
+                        .productCode(TEAM002_PRODUCT_CODE_WITHOUT_LICENSE)
                         .team(TEAM002_ID_CODE)
                         .build())
                 .contact(Contact.builder()
@@ -115,6 +109,26 @@ public class JbLicensesAssignNegativeTest extends BaseTest {
                 restrictedApiKeyCodeRequestSpecification);
 
         assertResponseBody(response, CODE_403.CODE, TEAM_MISMATCH.getCode(), TEAM_MISMATCH.getDescription());
+    }
+
+    @Story("Testing POST /api/v1/customer/licenses/assign")
+    @Description("Testing API: validate response with payload dummy team id")
+    @Test()
+    public void verifyResponse404WithInvalidTeamIdTest() {
+        LicensesAssignObject licenseApiModel = LicensesAssignObject.builder()
+                .license(License.builder()
+                        .productCode(TEAM002_PRODUCT_CODE_WITHOUT_LICENSE)
+                        .team(0)
+                        .build())
+                .contact(Contact.builder()
+                        .build())
+                .build();
+
+        Response response = extractApiResponse(licenseApiModel, ASSIGN_LICENSE);
+
+        assertResponseBody(response, CODE_404.CODE, TEAM_NOT_FOUND.getCode(),
+                getDescription(TEAM_NOT_FOUND.getDescription(),
+                        licenseApiModel.getLicense().getTeam(), ""));
     }
 
 
@@ -184,26 +198,5 @@ public class JbLicensesAssignNegativeTest extends BaseTest {
          * */
         Allure.addAttachment("COMMENT FOR TEST", COMMENT_3);
         assertThat(response.statusCode()).isEqualTo(CODE_400.CODE);
-    }
-
-
-    @Story("Testing POST /api/v1/customer/licenses/assign")
-    @Description("Testing API: validate response with payload dummy team id")
-    @Test()
-    public void verifyResponse404WithInvalidTeamIdTest() {
-        LicensesAssignObject licenseApiModel = LicensesAssignObject.builder()
-                .license(License.builder()
-                        .productCode(TEAM002_INACTIVE_PRODUCT_CODE)
-                        .team(0)
-                        .build())
-                .contact(Contact.builder()
-                        .build())
-                .build();
-
-        Response response = extractApiResponse(licenseApiModel, ASSIGN_LICENSE);
-
-        assertResponseBody(response, CODE_404.CODE, TEAM_NOT_FOUND.getCode(),
-                getDescription(TEAM_NOT_FOUND.getDescription(),
-                        licenseApiModel.getLicense().getTeam(), ""));
     }
 }
