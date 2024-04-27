@@ -16,7 +16,6 @@ import static api.ResponseHelper.extractApiResponse;
 import static api.ResponseHelper.extractApiResponseWithInvalidApiKeyCodeHeader;
 import static enums.ApiResponseValuesEnum.*;
 import static enums.StatusCodeEnum.*;
-import static org.assertj.core.api.Assertions.assertThat;
 import static utils.AssertionHelper.*;
 import static utils.AuthorCommentsToTests.*;
 import static utils.PropertyReader.getPropertyFromBundle;
@@ -160,9 +159,9 @@ public class JbLicensesAssignNegativeTest extends BaseTest {
     public void verifyResponseWithoutLicenseProductCodeFieldTest() {
         LicensesAssignObject licenseApiModel = LicensesAssignObject.builder()
                 .license(License.builder()
-                .productCode(null)
-                .team(TEAM002_ID_CODE)
-                .build())
+                        .productCode(null)
+                        .team(TEAM002_ID_CODE)
+                        .build())
                 .contact(Contact.builder()
                         .build())
                 .build();

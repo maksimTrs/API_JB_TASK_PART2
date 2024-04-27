@@ -15,7 +15,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 public class TestSteps {
 
     @Step("Prepare licenses for the team")
-    public  static void prepareLicensesForTheTeam(List<String> licenseList) {
+    public static void prepareLicensesForTheTeam(List<String> licenseList) {
         ChangeLicensesTeamObject changeLicensesTeamObject = ChangeLicensesTeamObject.builder()
                 .targetTeamId(TEAM002_ID_CODE)
                 .licenseIds(licenseList)
