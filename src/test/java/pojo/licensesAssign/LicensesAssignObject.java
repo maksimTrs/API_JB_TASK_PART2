@@ -13,11 +13,11 @@ import lombok.extern.jackson.Jacksonized;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.NON_NULL)
 public class LicensesAssignObject {
-	private License license;
-	@Builder.Default
-	private Boolean sendEmail = false;
-	@Builder.Default
-	private Boolean includeOfflineActivationCode = false;
-	private Contact contact;
-	private String licenseId;
+    private License license;
+    @Builder.Default
+    private Boolean sendEmail = false;
+    @Builder.Default
+    private Boolean includeOfflineActivationCode = false;
+    private Contact contact;
+    private String licenseId;
 }

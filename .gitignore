@@ -38,4 +38,4 @@ build/
 
 ### Mac OS ###
 .DS_Store
-/src/test/resources/LicencesBundle.properties
+/src/test/resources/TestDataBundle.properties

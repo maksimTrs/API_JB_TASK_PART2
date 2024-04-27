@@ -12,7 +12,7 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.NON_NULL)
-public class License{
-	private String productCode;
-	private int team;
+public class License {
+    private String productCode;
+    private int team;
 }

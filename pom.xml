@@ -228,7 +228,7 @@
                 <version>3.0.0-M5</version>
                 <configuration>
                     <includes>
-                       <!-- "**/*IT.java" - includes all of its subdirectories and all Java filenames that end with "IT".-->
+                        <!-- "**/*IT.java" - includes all of its subdirectories and all Java filenames that end with "IT".-->
                         <include>%regex[.*Test.*]</include>
                     </includes>
                 </configuration>

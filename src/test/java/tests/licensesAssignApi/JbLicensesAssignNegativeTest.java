@@ -11,21 +11,22 @@ import pojo.licensesAssign.License;
 import pojo.licensesAssign.LicensesAssignObject;
 import tests.BaseTest;
 
-import static enums.ApiResponseValuesEnum.*;
-import static org.assertj.core.api.Assertions.assertThat;
 import static api.ApiConstants.*;
-import static utils.AssertionHelper.assertResponseBody;
-import static api.ResponseHelper.*;
+import static api.ResponseHelper.extractApiResponse;
+import static api.ResponseHelper.extractApiResponseWithInvalidApiKeyCodeHeader;
+import static enums.ApiResponseValuesEnum.*;
 import static enums.StatusCodeEnum.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static utils.AssertionHelper.assertResponseBody;
 import static utils.AuthorCommentsToTests.*;
-import static utils.PropertyReader.getLicenseFromBundle;
+import static utils.PropertyReader.getPropertyFromBundle;
 
 
 public class JbLicensesAssignNegativeTest extends BaseTest {
 
-    private static final String Team002_LICENSE_3_ID = getLicenseFromBundle("WebStormLicenseID_Team002_3");
-    private static final String Team002_LICENSE_4_ID = getLicenseFromBundle("WebStormLicenseID_Team002_4");
-    private static final String Team002_INVALID_LICENSE_ID = getLicenseFromBundle("Invalid_LicenseID_Team002_1");
+    private static final String Team002_LICENSE_3_ID = getPropertyFromBundle("WebStormLicenseID_Team002_3");
+    private static final String Team002_LICENSE_4_ID = getPropertyFromBundle("WebStormLicenseID_Team002_4");
+    private static final String Team002_INVALID_LICENSE_ID = getPropertyFromBundle("Invalid_LicenseID_Team002_1");
 
     @Story("Testing POST /api/v1/customer/licenses/assign")
     @Description("Testing API: validate expired licenseId")

@@ -8,14 +8,17 @@ import io.restassured.http.ContentType;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
 import org.apache.log4j.Logger;
-import org.testng.annotations.*;
-
-
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.BeforeSuite;
 
 import java.io.IOException;
 import java.io.PrintStream;
 import java.lang.reflect.Method;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -27,16 +30,13 @@ import static api.ApiConstants.*;
 public abstract class BaseTest {
 
 
+    private static final Map<String, String> API_HEADERS = new HashMap<>();
     public static Logger logger = Logger.getLogger(BaseTest.class);
     public static PrintStream printStream;
     public static RequestSpecification testRequestSpecification;
     public static RequestSpecification invalidApiKeyCodeRequestSpecification;
     public static RequestSpecification restrictedApiKeyCodeRequestSpecification;
     public static ResponseSpecification testResponseSpecification;
-
-    private static final Map<String, String> API_HEADERS = new HashMap<>();
-
-
 
     @BeforeSuite
     public void beforeSuite() {
