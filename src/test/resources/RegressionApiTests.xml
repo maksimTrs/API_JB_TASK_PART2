@@ -1,0 +1,7 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+<suite name="REGRESSION-API-SUITE">
+    <suite-files>
+        <suite-file path="AssignLicensesApiTests.xml" />
+        <suite-file path="ChangeLicensesTeamApiTests.xml" />
+    </suite-files>
+</suite>

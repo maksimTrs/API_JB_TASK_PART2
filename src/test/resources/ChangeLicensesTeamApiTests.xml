@@ -1,0 +1,13 @@
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
+<suite name="team-change-licenses-api-test-runner" parallel="tests" thread-count="2">
+    <test name="API_TESTS_POSITIVE">
+        <classes>
+            <class name="tests.changeLicensesTeamApi.JbChangeLicensesTeamPositiveTest"/>
+        </classes>
+    </test>
+    <test name="API_TESTS_NEGATIVE">
+        <classes>
+            <class name="tests.changeLicensesTeamApi.JbChangeLicensesTeamNegativeTest"/>
+        </classes>
+    </test>
+</suite>

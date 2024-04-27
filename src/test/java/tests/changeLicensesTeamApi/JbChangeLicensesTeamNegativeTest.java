@@ -45,7 +45,7 @@ public class JbChangeLicensesTeamNegativeTest extends BaseTest {
     @Story("Testing POST api/v1/customer/changeLicensesTeam")
     @Description("Testing API: validate response without request licenseIds partition")
     @Test()
-    public void verifyResponseWithoutContactSectionTest() {
+    public void verifyResponseWithoutLicenseIdsSectionTest() {
         ChangeLicensesTeamObject changeLicensesTeamObject = ChangeLicensesTeamObject.builder()
                 .targetTeamId(TEAM002_ID_CODE)
                 .build();
