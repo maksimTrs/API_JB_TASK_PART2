@@ -24,7 +24,7 @@
 
 #### NOTE: To start tests with different mandatory  Headers, add variables before maven 'clean test' command:
 
-`-DTEAM_X_API_KEY=TEAM_API_KEY -DX_API_KEY=COMPANY_X_API_KEY -DX_CUSTOMER_CODE=COMPANY_CODE`
+`-DTEAM_X_API_KEY_HEADER=TEAM_API_KEY -DX_API_KEY_HEADER=COMPANY_X_API_KEY -DX_CUSTOMER_CODE_HEADER=COMPANY_CODE`
 
 ---
 
