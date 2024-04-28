@@ -14,6 +14,7 @@ import lombok.extern.jackson.Jacksonized;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.NON_NULL)
 public class Contact {
+
     @Builder.Default
     private String firstName = new Faker().name().firstName();
     @Builder.Default

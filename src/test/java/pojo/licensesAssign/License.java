@@ -13,6 +13,7 @@ import lombok.extern.jackson.Jacksonized;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.NON_NULL)
 public class License {
+
     private String productCode;
     private int team;
 }

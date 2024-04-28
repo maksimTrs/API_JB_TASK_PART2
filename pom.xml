@@ -28,6 +28,11 @@
         <aspectj.version>1.9.8</aspectj.version>
         <allure.rest.assured.ver>2.23.0</allure.rest.assured.ver>
         <allure.assertj.ver>2.23.0</allure.assertj.ver>
+        <jsonassert.ver>1.5.0</jsonassert.ver>
+        <log4j.ver>2.19.0</log4j.ver>
+        <javafaker.ver>1.0.2</javafaker.ver>
+        <slf4j.ver>2.0.6</slf4j.ver>
+        <jackson.databind.ver>2.16.1</jackson.databind.ver>
     </properties>
 
     <dependencies>
@@ -94,37 +99,42 @@
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jackson.databind.ver}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>2.16.1</version>
+            <version>${jackson.databind.ver}</version>
         </dependency>
         <dependency>
             <groupId>org.skyscreamer</groupId>
             <artifactId>jsonassert</artifactId>
-            <version>1.5.0</version>
+            <version>${jsonassert.ver}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-core</artifactId>
-            <version>2.19.0</version>
+            <version>${log4j.ver}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apache.logging.log4j</groupId>
             <artifactId>log4j-slf4j-impl</artifactId>
-            <version>2.19.0</version>
+            <version>${log4j.ver}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-log4j12</artifactId>
-            <version>2.0.6</version>
+            <version>${slf4j.ver}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>com.github.javafaker</groupId>
             <artifactId>javafaker</artifactId>
-            <version>1.0.2</version>
+            <version>${javafaker.ver}</version>
         </dependency>
     </dependencies>
 
@@ -166,8 +176,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>${maven.compiler.ver}</version>
                 <configuration>
-                    <source>17</source>
-                    <target>17</target>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
                 </configuration>
             </plugin>
             <plugin>

@@ -10,7 +10,7 @@ import static io.restassured.RestAssured.given;
 import static tests.BaseTest.*;
 
 
-public class ResponseHelper {
+public class ApiResponseBuilder {
 
     public static Response extractApiResponse(Object requestBody, String endPointUrl) {
         return given()
@@ -24,7 +24,6 @@ public class ResponseHelper {
                 .spec(testResponseSpecification)
                 .extract().response();
     }
-
 
     public static Response extractApiResponseWithInvalidApiKeyCodeHeader(Object requestBody, String endPointUrl,
                                                                          RequestSpecification specWithInvalidApiKey) {

@@ -40,12 +40,11 @@ public abstract class BaseTest {
 
     @BeforeSuite
     public void beforeSuite() {
-
-        API_HEADERS.put("X-Customer-Code", X_CUSTOMER_CODE);
-        API_HEADERS.put("X-Api-Key", X_API_KEY);
+        API_HEADERS.put("X-Customer-Code", X_CUSTOMER_CODE_HEADER);
+        API_HEADERS.put("X-Api-Key", X_API_KEY_HEADER);
 
         invalidApiKeyCodeRequestSpecification = createRequestSpecificationWithInvalidXApiKey("abcd1XyZ");
-        restrictedApiKeyCodeRequestSpecification = createRequestSpecificationWithInvalidXApiKey(TEAM_X_API_KEY);
+        restrictedApiKeyCodeRequestSpecification = createRequestSpecificationWithInvalidXApiKey(TEAM_X_API_KEY_HEADER);
     }
 
 
@@ -57,8 +56,8 @@ public abstract class BaseTest {
         printStream = new PrintStream(directories + "/RestAPILog_" + timestamp + ".log");
 
         testRequestSpecification = new RequestSpecBuilder()
-                .setBaseUri(HOST)
-                .setBasePath(SERVICE)
+                .setBaseUri(HOST_URL)
+                .setBasePath(CUSTOMER_API_ENDPOINT)
                 .addFilter(new AllureRestAssured())
                 .setContentType(ContentType.JSON)
                 .addHeaders(API_HEADERS)
@@ -88,8 +87,8 @@ public abstract class BaseTest {
 
     private RequestSpecification createRequestSpecificationWithInvalidXApiKey(String apiKeyValue) {
         return new RequestSpecBuilder()
-                .setBaseUri(HOST)
-                .setBasePath(SERVICE)
+                .setBaseUri(HOST_URL)
+                .setBasePath(CUSTOMER_API_ENDPOINT)
                 .addFilter(new AllureRestAssured())
                 .setContentType(ContentType.JSON)
                 .addHeader("X-Api-Key", apiKeyValue)

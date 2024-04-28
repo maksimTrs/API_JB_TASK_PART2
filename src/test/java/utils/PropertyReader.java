@@ -19,9 +19,7 @@ public class PropertyReader {
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
-    }
 
-    static {
         try {
             RESOURCE_BUNDLE = new PropertyResourceBundle(fis);
         } catch (IOException e) {

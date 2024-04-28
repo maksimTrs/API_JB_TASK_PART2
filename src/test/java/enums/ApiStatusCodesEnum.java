@@ -6,7 +6,8 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum StatusCodeEnum {
+public enum ApiStatusCodesEnum {
+
     CODE_200(200, "Success"),
     CODE_400(400, "Bad Request"),
     CODE_401(401, "Unauthorized"),

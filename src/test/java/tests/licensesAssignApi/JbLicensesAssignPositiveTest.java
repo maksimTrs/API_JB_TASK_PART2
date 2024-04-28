@@ -2,6 +2,7 @@ package tests.licensesAssignApi;
 
 
 import io.qameta.allure.Description;
+import io.qameta.allure.Feature;
 import io.qameta.allure.Story;
 import io.restassured.response.Response;
 import org.testng.annotations.Test;
@@ -11,38 +12,36 @@ import pojo.licensesAssign.LicensesAssignObject;
 import tests.BaseTest;
 
 import static api.ApiConstants.*;
-import static api.ResponseHelper.extractApiResponse;
-import static enums.StatusCodeEnum.CODE_200;
+import static api.ApiResponseBuilder.extractApiResponse;
+import static enums.ApiStatusCodesEnum.CODE_200;
 import static utils.AssertionHelper.assertResponseStatusCodeAndEmptyBody;
 import static utils.PropertyReader.getPropertyFromBundle;
 
 
+@Feature("API POSITIVE TESTING: POST /api/v1/customer/licenses/assign")
+@Story("Testing POST /api/v1/customer/licenses/assign")
 public class JbLicensesAssignPositiveTest extends BaseTest {
 
     private static final String Team002_LICENSE_1_ID = getPropertyFromBundle("WebStormLicenseID_Team002_1");
     private static final String Team002_LICENSE_2_ID = getPropertyFromBundle("WebStormLicenseID_Team002_2");
 
-
-    @Story("Testing POST /api/v1/customer/licenses/assign")
     @Description("Testing API: Payload with 'licenseId' and without 'license' partitions")
     @Test()
-    public void verifyAssignLicenseApiWithoutLicenseSectionTest() {
+    public void verifyRequestWithoutLicensePartitionTest() {
         LicensesAssignObject licenseApiModel = LicensesAssignObject.builder()
                 .licenseId(Team002_LICENSE_1_ID)
                 .contact(Contact.builder()
                         .build())
                 .build();
 
-        Response response = extractApiResponse(licenseApiModel, ASSIGN_LICENSE);
+        Response response = extractApiResponse(licenseApiModel, LICENSE_ASSIGNMENT_ENDPOINT);
 
         assertResponseStatusCodeAndEmptyBody(response, CODE_200.CODE);
     }
 
-
-    @Story("Testing POST /api/v1/customer/licenses/assign")
     @Description("Testing API: Payload without 'licenseId' and with 'license' partitions")
     @Test()
-    public void verifyAssignLicenseApiWithoutLicenseIdFieldTest() {
+    public void verifyRequestWithoutLicenseIdFieldTest() {
         LicensesAssignObject licenseApiModel = LicensesAssignObject.builder()
                 .license(License.builder()
                         .productCode(TEAM001_ACTIVE_PRODUCT_CODE)
@@ -52,16 +51,14 @@ public class JbLicensesAssignPositiveTest extends BaseTest {
                         .build())
                 .build();
 
-        Response response = extractApiResponse(licenseApiModel, ASSIGN_LICENSE);
+        Response response = extractApiResponse(licenseApiModel, LICENSE_ASSIGNMENT_ENDPOINT);
 
         assertResponseStatusCodeAndEmptyBody(response, CODE_200.CODE);
     }
 
-
-    @Story("Testing POST /api/v1/customer/licenses/assign")
     @Description("Testing API: Payload with 'licenseId' and with 'license' partitions")
     @Test()
-    public void verifyAssignLicenseApiWithLicenseIdAndLicenseSectionsTest() {
+    public void verifyRequestWithLicenseIdAndLicensePartitionsTest() {
         LicensesAssignObject licenseApiModel = LicensesAssignObject.builder()
                 .licenseId(Team002_LICENSE_2_ID)
                 .license(License.builder()
@@ -72,7 +69,7 @@ public class JbLicensesAssignPositiveTest extends BaseTest {
                         .build())
                 .build();
 
-        Response response = extractApiResponse(licenseApiModel, ASSIGN_LICENSE);
+        Response response = extractApiResponse(licenseApiModel, LICENSE_ASSIGNMENT_ENDPOINT);
 
         assertResponseStatusCodeAndEmptyBody(response, CODE_200.CODE);
     }

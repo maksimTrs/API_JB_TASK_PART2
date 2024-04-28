@@ -8,31 +8,37 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class AssertionHelper {
 
+    private static final String HEADER_CONTENT_TYPE = "Content-Type";
+    private static final String CODE_JSON_PATH = "code";
+    private static final String DESCRIPTION_JSON_PATH = "description";
+    private static final String LICENSES_IDS_JSON_PATH = "licenseIds";
+
     public static void assertResponseStatusCodeAndEmptyBody(Response response, int expectedStatusCode) {
         assertThat(response.statusCode()).isEqualTo(expectedStatusCode);
         assertThat(response.getBody().asString()).isEmpty();
     }
 
-    public static void assertResponseStatusCodeAndContentType(Response response, int expectedStatusCode,
-                                                              String contentType) {
+    public static void assertResponseStatusCodeWithContentTypeValue(Response response, int expectedStatusCode,
+                                                                    String contentType) {
         assertThat(response.statusCode()).isEqualTo(expectedStatusCode);
-        assertThat(response.getHeader("Content-Type")).contains(contentType);
+        assertThat(response.getHeader(HEADER_CONTENT_TYPE)).contains(contentType);
     }
 
-    public static void assertResponseBody(Response response, int expectedStatusCode,
-                                          String codeMessage, String descriptionMessage) {
+    public static void assertResponseStatusCodeWithCodeAndDescriptionValues(Response response, int expectedStatusCode,
+                                                                            String codeMessage, String descriptionMessage) {
         assertThat(response.statusCode()).isEqualTo(expectedStatusCode);
-        assertThat(response.jsonPath().get("code").toString())
+        assertThat(response.jsonPath().get(CODE_JSON_PATH).toString())
                 .isEqualTo(codeMessage);
-        assertThat(response.jsonPath().get("description").toString())
+        assertThat(response.jsonPath().get(DESCRIPTION_JSON_PATH).toString())
                 .isEqualTo(descriptionMessage);
     }
 
-    public static void assertLicenseIdsResponseBody(Response response, int expectedStatusCode, List<String> expectedLicenseIds) {
+    public static void assertResponseStatusCodeWithLicenseIdsValues(Response response, int expectedStatusCode,
+                                                                    List<String> expectedLicenseIds) {
         assertThat(response.statusCode()).isEqualTo(expectedStatusCode);
-        // Get the "licenseIds" value as a List
-        List<String> actualLicenseIds = response.jsonPath().getList("licenseIds", String.class);
-        // Check if the list is null or empty
+
+        List<String> actualLicenseIds = response.jsonPath().getList(LICENSES_IDS_JSON_PATH, String.class);
+
         if (expectedLicenseIds.isEmpty()) {
             assertThat(actualLicenseIds).isEmpty();
         } else {

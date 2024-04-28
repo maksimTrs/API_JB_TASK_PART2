@@ -6,23 +6,22 @@ import pojo.changeLicensesTeam.ChangeLicensesTeamObject;
 
 import java.util.List;
 
-import static api.ApiConstants.CHANGE_LICENSE;
-import static api.ApiConstants.TEAM002_ID_CODE;
-import static api.ResponseHelper.extractApiResponse;
-import static enums.StatusCodeEnum.CODE_200;
+import static api.ApiConstants.LICENSE_CHANGE_ENDPOINT;
+import static api.ApiResponseBuilder.extractApiResponse;
+import static enums.ApiStatusCodesEnum.CODE_200;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class TestSteps {
 
     @Step("Prepare team licenses: {licenseList}")
-    public static void prepareLicensesForTheTeam(List<String> licenseList) {
+    public static void prepareLicensesForTheTeam(List<String> licenseList, int teamId) {
         ChangeLicensesTeamObject changeLicensesTeamObject = ChangeLicensesTeamObject.builder()
-                .targetTeamId(TEAM002_ID_CODE)
+                .targetTeamId(teamId)
                 .licenseIds(licenseList)
                 .build();
 
-        Response response = extractApiResponse(changeLicensesTeamObject, CHANGE_LICENSE);
+        Response response = extractApiResponse(changeLicensesTeamObject, LICENSE_CHANGE_ENDPOINT);
+
         assertThat(response.statusCode()).isEqualTo(CODE_200.CODE);
     }
-
 }

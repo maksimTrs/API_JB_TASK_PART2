@@ -5,7 +5,8 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public enum ApiResponseValuesEnum {
+public enum ApiResponseCodeAndDescriptionFieldsEnum {
+
     LICENSE_IS_NOT_AVAILABLE_TO_ASSIGN("LICENSE_IS_NOT_AVAILABLE_TO_ASSIGN", "NON_PER_USER"),
     NO_AVAILABLE_LICENSE_TO_ASSIGN("NO_AVAILABLE_LICENSE_TO_ASSIGN",
             "No available license found to assign in the team %d with product %s"),

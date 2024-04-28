@@ -1,14 +1,14 @@
 ### **POST /api/v1/customer/licenses/assign, /api/v1/customer/changeLicensesTeam API TCs:**
 
+[**jetbrains api**](https://account.jetbrains.com/api-doc#/)
+
 ---
 
 ##### To start tests via maven wrapper with TestNG on  WINDOWS, run commands:
 
 `./mvnw -DsuiteXmlFile="AssignLicensesApiTests.xml" clean test`
 
-
 `./mvnw -DsuiteXmlFile="ChangeLicensesTeamApiTests.xml" clean test`
-
 
 `./mvnw -DsuiteXmlFile="RegressionApiTests.xml" clean test`  (all tests)
 
@@ -18,13 +18,9 @@
 
 `./mvnw -DsuiteXmlFile='AssignLicensesApiTests.xml' clean test`
 
-
 `./mvnw -DsuiteXmlFile='ChangeLicensesTeamApiTests.xml' clean test`
 
-
 `./mvnw -DsuiteXmlFile='RegressionApiTests.xml' clean test`  (all tests)
-
-
 
 #### NOTE: To start tests with different mandatory  Headers, add variables before maven 'clean test' command:
 
@@ -34,4 +30,4 @@
 
 ### **To start allure report, run command:**
 
-`mvn allure:serve`
+`./mvnw allure:serve`
