@@ -1,18 +1,32 @@
-### **POST /api/v1/customer/licenses/assign API TCs:**
+### **POST /api/v1/customer/licenses/assign, /api/v1/customer/changeLicensesTeam API TCs:**
 
 ---
 
-##### To start tests via maven wrapper with TestNG on  WINDOWS, run command:
+##### To start tests via maven wrapper with TestNG on  WINDOWS, run commands:
 
-`./mvnw -DsuiteXmlFile="AssignLicenseRequestApiTests.xml"  clean test`
+`./mvnw -DsuiteXmlFile="AssignLicensesApiTests.xml" clean test`
+
+
+`./mvnw -DsuiteXmlFile="ChangeLicensesTeamApiTests.xml" clean test`
+
+
+`./mvnw -DsuiteXmlFile="RegressionApiTests.xml" clean test`  (all tests)
 
 **OR**
 
 ##### To start tests via maven wrapper with TestNG  on MAC, run command:
 
-`./mvnw -DsuiteXmlFile='AssignLicenseRequestApiTests.xml'  clean test`
+`./mvnw -DsuiteXmlFile='AssignLicensesApiTests.xml' clean test`
 
-##### To start tests with mandatory optional Headers, add variables before maven 'clean test' command:
+
+`./mvnw -DsuiteXmlFile='ChangeLicensesTeamApiTests.xml' clean test`
+
+
+`./mvnw -DsuiteXmlFile='RegressionApiTests.xml' clean test`  (all tests)
+
+
+
+#### NOTE: To start tests with different mandatory  Headers, add variables before maven 'clean test' command:
 
 `-DTEAM_X_API_KEY=TEAM_API_KEY -DX_API_KEY=COMPANY_X_API_KEY -DX_CUSTOMER_CODE=COMPANY_CODE`
 
