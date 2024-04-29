@@ -1,11 +1,11 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
 <suite name="licenses-assign-api-suite" parallel="tests" thread-count="2">
-    <test name="API_TESTS_POSITIVE_SUITE">
+    <test name="/api/v1/customer/licenses/assign POSITIVE TESTS">
         <classes>
             <class name="tests.licensesAssignApi.JbLicensesAssignPositiveTest"/>
         </classes>
     </test>
-    <test name="API_TESTS_NEGATIVE_SUITE">
+    <test name="/api/v1/customer/licenses/assign NEGATIVE TESTS">
         <classes>
             <class name="tests.licensesAssignApi.JbLicensesAssignNegativeTest"/>
         </classes>

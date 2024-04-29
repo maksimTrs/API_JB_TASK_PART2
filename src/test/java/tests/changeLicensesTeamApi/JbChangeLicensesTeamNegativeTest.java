@@ -15,7 +15,7 @@ import static api.ApiConstants.LICENSE_CHANGE_ENDPOINT;
 import static api.ApiConstants.TEAM002_ID_CODE;
 import static api.ApiResponseBuilder.extractApiResponse;
 import static enums.ApiResponseCodeAndDescriptionFieldsEnum.TEAM_NOT_FOUND;
-import static enums.ApiResponseCodeAndDescriptionFieldsEnum.getDescription;
+import static enums.ApiResponseCodeAndDescriptionFieldsEnum.getFormatDescription;
 import static enums.ApiStatusCodesEnum.CODE_400;
 import static enums.ApiStatusCodesEnum.CODE_404;
 import static utils.AssertionHelper.assertResponseStatusCodeWithCodeAndDescriptionValues;
@@ -40,8 +40,8 @@ public class JbChangeLicensesTeamNegativeTest extends BaseTest {
         Response response = extractApiResponse(changeLicensesTeamObject, LICENSE_CHANGE_ENDPOINT);
 
         assertResponseStatusCodeWithCodeAndDescriptionValues(response, CODE_404.CODE, TEAM_NOT_FOUND.getCode(),
-                getDescription(TEAM_NOT_FOUND.getDescription(),
-                        changeLicensesTeamObject.getTargetTeamId(), ""));
+                getFormatDescription(TEAM_NOT_FOUND.getDescription(),
+                        String.valueOf(changeLicensesTeamObject.getTargetTeamId()), ""));
     }
 
     @Description("Testing API: validate response without 'licenseIds' partition")

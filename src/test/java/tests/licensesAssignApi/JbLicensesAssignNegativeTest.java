@@ -30,6 +30,24 @@ public class JbLicensesAssignNegativeTest extends BaseTest {
     private static final String Team002_LICENSE_4_ID = getPropertyFromBundle("WebStormLicenseID_Team002_4");
     private static final String Team002_INVALID_LICENSE_ID = getPropertyFromBundle("Invalid_LicenseID_Team002_1");
 
+
+    @Description("Testing API: validate response with incorrect 'contact.email'  field")
+    @Test()
+    public void verifyResponseWithInvalidEmailTest() {
+        LicensesAssignObject licenseApiModel = LicensesAssignObject.builder()
+                .licenseId(Team002_LICENSE_3_ID)
+                .contact(Contact.builder()
+                        .email("invalidEmail.com")
+                        .build())
+                .build();
+
+        Response response = extractApiResponse(licenseApiModel, LICENSE_ASSIGNMENT_ENDPOINT);
+
+        assertResponseStatusCodeWithCodeAndDescriptionValues(response, CODE_400.CODE, INVALID_CONTACT_EMAIL.getCode(),
+                getFormatDescription(INVALID_CONTACT_EMAIL.getDescription(),
+                        licenseApiModel.getContact().getEmail(), ""));
+    }
+
     @Description("Testing API: validate expired 'licenseId' field")
     @Test()
     public void verifyExpiredLicenseIdFieldTest() {
@@ -62,8 +80,8 @@ public class JbLicensesAssignNegativeTest extends BaseTest {
 
         assertResponseStatusCodeWithCodeAndDescriptionValues(response, CODE_400.CODE,
                 NO_AVAILABLE_LICENSE_TO_ASSIGN.getCode(),
-                getDescription(NO_AVAILABLE_LICENSE_TO_ASSIGN.getDescription(),
-                        licenseApiModel.getLicense().getTeam(), licenseApiModel.getLicense().getProductCode()));
+                getFormatDescription(NO_AVAILABLE_LICENSE_TO_ASSIGN.getDescription(),
+                        String.valueOf(licenseApiModel.getLicense().getTeam()), licenseApiModel.getLicense().getProductCode()));
     }
 
     @Description("Testing API: validate response for missed 'licenseId' and 'license' partitions")
@@ -129,8 +147,8 @@ public class JbLicensesAssignNegativeTest extends BaseTest {
         Response response = extractApiResponse(licenseApiModel, LICENSE_ASSIGNMENT_ENDPOINT);
 
         assertResponseStatusCodeWithCodeAndDescriptionValues(response, CODE_404.CODE, TEAM_NOT_FOUND.getCode(),
-                getDescription(TEAM_NOT_FOUND.getDescription(),
-                        licenseApiModel.getLicense().getTeam(), ""));
+                getFormatDescription(TEAM_NOT_FOUND.getDescription(),
+                        String.valueOf(licenseApiModel.getLicense().getTeam()), ""));
     }
 
     @Description("Testing API: validate response without 'contact' partition")
