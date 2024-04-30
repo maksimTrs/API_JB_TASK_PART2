@@ -4,7 +4,6 @@ import io.qameta.allure.Description;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Story;
 import io.restassured.response.Response;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import pojo.changeLicensesTeam.ChangeLicensesTeamObject;
 import tests.BaseTest;
@@ -23,30 +22,29 @@ import static utils.PropertyReader.getLicenseListFromBundle;
 public class JbChangeLicensesTeamPositiveTest extends BaseTest {
 
     private static final List<String> LICENSE_LIST = getLicenseListFromBundle("DataGripLicenseListIDs");
-    private static final List<String> FIRST_LICENSE = List.of(LICENSE_LIST.get(0));
     private final List<String> LICENSE_EMPTY_LIST = List.of();
-
-    @BeforeMethod
-    private void beforeTestMethod() {
-        prepareLicensesForTheTeam(LICENSE_LIST, TEAM002_ID_CODE);
-    }
 
     @Description("Testing API: Payload with single value in 'licenseIds' field")
     @Test()
     public void verifySingleLicenseTest() {
+        prepareLicensesForTheTeam(LICENSE_LIST, TEAM002_ID_CODE);
+        List<String> SINGLE_LICENSE_LIST = List.of(LICENSE_LIST.get(0));
+
         ChangeLicensesTeamObject changeLicensesTeamObject = ChangeLicensesTeamObject.builder()
                 .targetTeamId(TEAM001_ID_CODE)
-                .licenseIds(FIRST_LICENSE)
+                .licenseIds(SINGLE_LICENSE_LIST)
                 .build();
 
         Response response = extractApiResponse(changeLicensesTeamObject, LICENSE_CHANGE_ENDPOINT);
 
-        assertResponseStatusCodeWithLicenseIdsValues(response, CODE_200.CODE, FIRST_LICENSE);
+        assertResponseStatusCodeWithLicenseIdsValues(response, CODE_200.CODE, SINGLE_LICENSE_LIST);
     }
 
     @Description("Testing API: Payload with multiple values in 'licenseIds' field")
     @Test()
     public void verifyMultipleLicensesTest() {
+        prepareLicensesForTheTeam(LICENSE_LIST, TEAM002_ID_CODE);
+
         ChangeLicensesTeamObject changeLicensesTeamObject = ChangeLicensesTeamObject.builder()
                 .targetTeamId(TEAM001_ID_CODE)
                 .licenseIds(LICENSE_LIST)
