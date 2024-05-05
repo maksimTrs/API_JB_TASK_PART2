@@ -29,7 +29,7 @@ public class AssertionHelper {
 
             Allure.attachment("Expected status code:", String.valueOf(expectedStatusCode));
             Allure.attachment("Actual status code:", String.valueOf(response.statusCode()));
-            Allure.attachment("Actual body:", String.valueOf(response.getBody().asString()));
+            Allure.attachment("Actual body:", response.getBody().asString());
             throw e;
         }
     }
@@ -48,7 +48,7 @@ public class AssertionHelper {
             Allure.attachment("Actual status code:", String.valueOf(response.statusCode()));
             Allure.attachment("Expected content type:", expectedContentType);
             Allure.attachment("Actual content type:", response.getHeader(HEADER_CONTENT_TYPE));
-            Allure.attachment("Actual response body:", String.valueOf(response.getBody().asString()));
+            Allure.attachment("Actual response body:", response.getBody().asString());
             throw e;
         }
     }
