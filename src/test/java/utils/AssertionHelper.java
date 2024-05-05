@@ -22,8 +22,10 @@ public class AssertionHelper {
             assertThat(response.getBody().asString()).isEmpty();
         } catch (AssertionError e) {
             Allure.step("Assertion failed: Actual value does not match expected value: ");
-            Allure.attachment("Expected status code", String.valueOf(expectedStatusCode));
-            Allure.attachment("Actual body", String.valueOf(response.getBody().asString()));
+
+            Allure.attachment("Expected status code:", String.valueOf(expectedStatusCode));
+            Allure.attachment("Actual status code:", String.valueOf(response.statusCode()));
+            Allure.attachment("Actual body:", String.valueOf(response.getBody().asString()));
             throw e;
         }
     }
@@ -36,8 +38,11 @@ public class AssertionHelper {
             assertThat(response.getHeader(HEADER_CONTENT_TYPE)).contains(expectedContentType);
         } catch (AssertionError e) {
             Allure.step("Assertion failed: Actual value does not match expected value: ");
-            Allure.attachment("Expected status code", String.valueOf(expectedStatusCode));
-            Allure.attachment("Expected content type", expectedContentType);
+
+            Allure.attachment("Expected status code:", String.valueOf(expectedStatusCode));
+            Allure.attachment("Actual status code:", String.valueOf(response.statusCode()));
+            Allure.attachment("Expected content type:", expectedContentType);
+            Allure.attachment("Actual content type:", response.getHeader(HEADER_CONTENT_TYPE));
             throw e;
         }
     }
@@ -52,8 +57,11 @@ public class AssertionHelper {
             assertThat(response.jsonPath().get(DESCRIPTION_JSON_PATH).toString()).isEqualTo(expectedDescriptionMessage);
         } catch (AssertionError e) {
             Allure.step("Assertion failed: Actual value does not match expected value: ");
-            Allure.attachment("Expected code message", expectedCodeMessage);
-            Allure.attachment("Expected description message", expectedDescriptionMessage);
+
+            Allure.attachment("Expected code message:", expectedCodeMessage);
+            Allure.attachment("Actual code message:", response.jsonPath().get(CODE_JSON_PATH).toString());
+            Allure.attachment("Expected description message:", expectedDescriptionMessage);
+            Allure.attachment("Actual description message:", response.jsonPath().get(DESCRIPTION_JSON_PATH).toString());
             throw e;
         }
     }
@@ -74,7 +82,8 @@ public class AssertionHelper {
             }
         } catch (AssertionError e) {
             Allure.step("Assertion failed: Actual value does not match expected value: ");
-            Allure.attachment("Expected lLicense Ids", expectedLicenseIds.toString());
+
+            Allure.attachment("Expected lLicense Ids list:", expectedLicenseIds.toString());
             throw e;
         }
     }
