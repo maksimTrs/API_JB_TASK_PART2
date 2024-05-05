@@ -30,7 +30,7 @@ public class AssertionHelper {
         }
     }
 
-    @Step("Assert response status code: {expectedStatusCode} and content type: {contentType}")
+    @Step("Assert response status code: {expectedStatusCode} and content type: {expectedContentType}")
     public static void assertResponseStatusCodeAndContentType(Response response, int expectedStatusCode,
                                                               String expectedContentType) {
         try {
@@ -48,7 +48,8 @@ public class AssertionHelper {
         }
     }
 
-    @Step("Assert response status code: {expectedStatusCode} and code: {codeMessage} and description: {descriptionMessage}")
+    @Step("Assert response status code: {expectedStatusCode} and code: {expectedCodeMessage} " +
+            "and description: {expectedDescriptionMessage}")
     public static void assertResponseStatusCodeAndResponseBody(Response response, int expectedStatusCode,
                                                                String expectedCodeMessage, String expectedDescriptionMessage) {
         try {
