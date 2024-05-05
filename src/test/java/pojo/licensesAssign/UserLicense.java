@@ -12,7 +12,7 @@ import lombok.extern.jackson.Jacksonized;
 @Jacksonized
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(Include.NON_NULL)
-public class LicensesAssignObject {
+public class UserLicense {
 
     private License license;
     @Builder.Default

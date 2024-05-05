@@ -8,7 +8,7 @@ import io.restassured.response.Response;
 import org.testng.annotations.Test;
 import pojo.licensesAssign.Contact;
 import pojo.licensesAssign.License;
-import pojo.licensesAssign.LicensesAssignObject;
+import pojo.licensesAssign.UserLicense;
 import tests.BaseTest;
 
 import static api.ApiConstants.*;
@@ -26,9 +26,9 @@ public class JbLicensesAssignPositiveTest extends BaseTest {
     private static final String Team002_LICENSE_2_ID = getPropertyFromBundle("WebStormLicenseID_Team002_2");
 
     @Description("Testing API: Payload with 'licenseId' and without 'license' partitions")
-    @Test()
-    public void verifyRequestWithoutLicensePartitionTest() {
-        LicensesAssignObject licenseApiModel = LicensesAssignObject.builder()
+    @Test
+    public void verifyAssignLicenseWithoutLicensePartitionTest() {
+        UserLicense licenseApiModel = UserLicense.builder()
                 .licenseId(Team002_LICENSE_1_ID)
                 .contact(Contact.builder()
                         .build())
@@ -40,9 +40,9 @@ public class JbLicensesAssignPositiveTest extends BaseTest {
     }
 
     @Description("Testing API: Payload without 'licenseId' and with 'license' partitions")
-    @Test()
-    public void verifyRequestWithoutLicenseIdFieldTest() {
-        LicensesAssignObject licenseApiModel = LicensesAssignObject.builder()
+    @Test
+    public void verifyAssignLicenseWithoutLicenseIdFieldTest() {
+        UserLicense licenseApiModel = UserLicense.builder()
                 .license(License.builder()
                         .productCode(TEAM001_ACTIVE_PRODUCT_CODE)
                         .team(TEAM001_ID_CODE)
@@ -57,9 +57,9 @@ public class JbLicensesAssignPositiveTest extends BaseTest {
     }
 
     @Description("Testing API: Payload with 'licenseId' and with 'license' partitions")
-    @Test()
-    public void verifyRequestWithLicenseIdAndLicensePartitionsTest() {
-        LicensesAssignObject licenseApiModel = LicensesAssignObject.builder()
+    @Test
+    public void verifyAssignLicenseWithLicenseIdAndLicensePartitionsTest() {
+        UserLicense licenseApiModel = UserLicense.builder()
                 .licenseId(Team002_LICENSE_2_ID)
                 .license(License.builder()
                         .productCode(TEAM001_ACTIVE_PRODUCT_CODE)

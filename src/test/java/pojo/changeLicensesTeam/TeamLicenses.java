@@ -13,7 +13,7 @@ import java.util.List;
 @Jacksonized
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class ChangeLicensesTeamObject {
+public class TeamLicenses {
 
     private int targetTeamId;
     private List<String> licenseIds;

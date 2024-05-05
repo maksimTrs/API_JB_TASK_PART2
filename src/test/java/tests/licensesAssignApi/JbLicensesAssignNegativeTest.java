@@ -9,13 +9,13 @@ import io.restassured.response.Response;
 import org.testng.annotations.Test;
 import pojo.licensesAssign.Contact;
 import pojo.licensesAssign.License;
-import pojo.licensesAssign.LicensesAssignObject;
+import pojo.licensesAssign.UserLicense;
 import tests.BaseTest;
 
 import static api.ApiConstants.*;
 import static api.ApiResponseBuilder.extractApiResponse;
 import static api.ApiResponseBuilder.extractApiResponseWithInvalidApiKeyCodeHeader;
-import static enums.ApiResponseCodeAndDescriptionFieldsEnum.*;
+import static enums.ApiErrorResponseCodeAndDescriptionFieldsEnum.*;
 import static enums.ApiStatusCodesEnum.*;
 import static utils.AssertionHelper.*;
 import static utils.AuthorCommentsForTests.*;
@@ -28,13 +28,13 @@ public class JbLicensesAssignNegativeTest extends BaseTest {
 
     private static final String Team002_LICENSE_3_ID = getPropertyFromBundle("WebStormLicenseID_Team002_3");
     private static final String Team002_LICENSE_4_ID = getPropertyFromBundle("WebStormLicenseID_Team002_4");
-    private static final String Team002_INVALID_LICENSE_ID = getPropertyFromBundle("Invalid_LicenseID_Team002_1");
+    private static final String Team002_EXPIRED_LICENSE_ID = getPropertyFromBundle("Invalid_LicenseID_Team002_1");
 
 
     @Description("Testing API: validate response with incorrect 'contact.email'  field")
-    @Test()
-    public void verifyResponseWithInvalidEmailTest() {
-        LicensesAssignObject licenseApiModel = LicensesAssignObject.builder()
+    @Test
+    public void verifyAssignLicenseWithInvalidEmailTest() {
+        UserLicense licenseApiModel = UserLicense.builder()
                 .licenseId(Team002_LICENSE_3_ID)
                 .contact(Contact.builder()
                         .email("invalidEmail.com")
@@ -43,31 +43,31 @@ public class JbLicensesAssignNegativeTest extends BaseTest {
 
         Response response = extractApiResponse(licenseApiModel, LICENSE_ASSIGNMENT_ENDPOINT);
 
-        assertResponseStatusCodeWithCodeAndDescriptionValues(response, CODE_400.CODE, INVALID_CONTACT_EMAIL.getCode(),
-                getFormatDescription(INVALID_CONTACT_EMAIL.getDescription(),
+        assertResponseStatusCodeAndResponseBody(response, CODE_400.CODE, INVALID_CONTACT_EMAIL_RESPONSE.getCode(),
+                getFormatDescription(INVALID_CONTACT_EMAIL_RESPONSE.getDescription(),
                         licenseApiModel.getContact().getEmail(), ""));
     }
 
     @Description("Testing API: validate expired 'licenseId' field")
-    @Test()
-    public void verifyExpiredLicenseIdFieldTest() {
-        LicensesAssignObject licenseApiModel = LicensesAssignObject.builder()
-                .licenseId(Team002_INVALID_LICENSE_ID)
+    @Test
+    public void verifyAssignLicenseExpiredLicenseIdFieldTest() {
+        UserLicense licenseApiModel = UserLicense.builder()
+                .licenseId(Team002_EXPIRED_LICENSE_ID)
                 .contact(Contact.builder()
                         .build())
                 .build();
 
         Response response = extractApiResponse(licenseApiModel, LICENSE_ASSIGNMENT_ENDPOINT);
 
-        assertResponseStatusCodeWithCodeAndDescriptionValues(response, CODE_400.CODE,
-                LICENSE_IS_NOT_AVAILABLE_TO_ASSIGN.getCode(),
-                LICENSE_IS_NOT_AVAILABLE_TO_ASSIGN.getDescription());
+        assertResponseStatusCodeAndResponseBody(response, CODE_400.CODE,
+                LICENSE_IS_NOT_AVAILABLE_TO_ASSIGN_RESPONSE.getCode(),
+                LICENSE_IS_NOT_AVAILABLE_TO_ASSIGN_RESPONSE.getDescription());
     }
 
     @Description("Testing API: validate non-existent licenses for the team per product")
-    @Test()
-    public void verifyEmptyAvailableLicensesForTeamProductTest() {
-        LicensesAssignObject licenseApiModel = LicensesAssignObject.builder()
+    @Test
+    public void verifyAssignLicenseEmptyAvailableLicensesForTeamProductTest() {
+        UserLicense licenseApiModel = UserLicense.builder()
                 .license(License.builder()
                         .productCode(TEAM002_PRODUCT_CODE_WITHOUT_LICENSE)
                         .team(TEAM002_ID_CODE)
@@ -78,31 +78,31 @@ public class JbLicensesAssignNegativeTest extends BaseTest {
 
         Response response = extractApiResponse(licenseApiModel, LICENSE_ASSIGNMENT_ENDPOINT);
 
-        assertResponseStatusCodeWithCodeAndDescriptionValues(response, CODE_400.CODE,
-                NO_AVAILABLE_LICENSE_TO_ASSIGN.getCode(),
-                getFormatDescription(NO_AVAILABLE_LICENSE_TO_ASSIGN.getDescription(),
+        assertResponseStatusCodeAndResponseBody(response, CODE_400.CODE,
+                NO_AVAILABLE_LICENSE_TO_ASSIGN_RESPONSE.getCode(),
+                getFormatDescription(NO_AVAILABLE_LICENSE_TO_ASSIGN_RESPONSE.getDescription(),
                         String.valueOf(licenseApiModel.getLicense().getTeam()), licenseApiModel.getLicense().getProductCode()));
     }
 
     @Description("Testing API: validate response for missed 'licenseId' and 'license' partitions")
-    @Test()
-    public void verifyResponseForMissedLicenseIdAndLicensePartitionsTest() {
-        LicensesAssignObject licenseApiModel = LicensesAssignObject.builder()
+    @Test
+    public void verifyAssignLicenseForMissedLicenseIdAndLicensePartitionsTest() {
+        UserLicense licenseApiModel = UserLicense.builder()
                 .contact(Contact.builder()
                         .build())
                 .build();
 
         Response response = extractApiResponse(licenseApiModel, LICENSE_ASSIGNMENT_ENDPOINT);
 
-        assertResponseStatusCodeWithCodeAndDescriptionValues(response, CODE_400.CODE, MISSING_FIELD.getCode(),
-                MISSING_FIELD.getDescription());
+        assertResponseStatusCodeAndResponseBody(response, CODE_400.CODE, MISSING_FIELD_RESPONSE.getCode(),
+                MISSING_FIELD_RESPONSE.getDescription());
     }
 
     @Description("Testing API: validate response with invalid X-Api-Key header - 401 response code")
-    @Test()
-    public void verifyResponse401ForInvalidXApiKeyHeaderTest() {
-        LicensesAssignObject licenseApiModel = LicensesAssignObject.builder()
-                .licenseId(Team002_INVALID_LICENSE_ID)
+    @Test
+    public void verifyAssignLicense401StatusForInvalidXApiKeyHeaderTest() {
+        UserLicense licenseApiModel = UserLicense.builder()
+                .licenseId(Team002_EXPIRED_LICENSE_ID)
                 .contact(Contact.builder()
                         .build())
                 .build();
@@ -111,15 +111,15 @@ public class JbLicensesAssignNegativeTest extends BaseTest {
                 LICENSE_ASSIGNMENT_ENDPOINT,
                 invalidApiKeyCodeRequestSpecification);
 
-        assertResponseStatusCodeWithCodeAndDescriptionValues(response, CODE_401.CODE, INVALID_TOKEN.getCode(),
-                INVALID_TOKEN.getDescription());
+        assertResponseStatusCodeAndResponseBody(response, CODE_401.CODE, INVALID_TOKEN_RESPONSE.getCode(),
+                INVALID_TOKEN_RESPONSE.getDescription());
     }
 
     @Description("Testing API: validate response with restricted X-Api-Key header - 403 response code")
-    @Test()
-    public void verifyResponse403ForInvalidXApiKeyHeaderTest() {
-        LicensesAssignObject licenseApiModel = LicensesAssignObject.builder()
-                .licenseId(Team002_INVALID_LICENSE_ID)
+    @Test
+    public void verifyAssignLicenseStatus403ForInvalidXApiKeyHeaderTest() {
+        UserLicense licenseApiModel = UserLicense.builder()
+                .licenseId(Team002_EXPIRED_LICENSE_ID)
                 .contact(Contact.builder()
                         .build())
                 .build();
@@ -128,17 +128,18 @@ public class JbLicensesAssignNegativeTest extends BaseTest {
                 LICENSE_ASSIGNMENT_ENDPOINT,
                 restrictedApiKeyCodeRequestSpecification);
 
-        assertResponseStatusCodeWithCodeAndDescriptionValues(response, CODE_403.CODE, TEAM_MISMATCH.getCode(),
-                TEAM_MISMATCH.getDescription());
+        assertResponseStatusCodeAndResponseBody(response, CODE_403.CODE, TEAM_MISMATCH_RESPONSE.getCode(),
+                TEAM_MISMATCH_RESPONSE.getDescription());
     }
 
-    @Description("Testing API: validate response with payload dummy 'license.team' id field")
-    @Test()
-    public void verifyResponse404WithInvalidTeamIdTest() {
-        LicensesAssignObject licenseApiModel = LicensesAssignObject.builder()
+    @Description("Testing API: validate response with payload dummy 'license.team' id field - 404 response code")
+    @Test
+    public void verifyAssignLicenseStatus404WithInvalidTeamIdTest() {
+        int invalidTeamId = 0;
+        UserLicense licenseApiModel = UserLicense.builder()
                 .license(License.builder()
                         .productCode(TEAM002_PRODUCT_CODE_WITHOUT_LICENSE)
-                        .team(0)
+                        .team(invalidTeamId)
                         .build())
                 .contact(Contact.builder()
                         .build())
@@ -146,16 +147,16 @@ public class JbLicensesAssignNegativeTest extends BaseTest {
 
         Response response = extractApiResponse(licenseApiModel, LICENSE_ASSIGNMENT_ENDPOINT);
 
-        assertResponseStatusCodeWithCodeAndDescriptionValues(response, CODE_404.CODE, TEAM_NOT_FOUND.getCode(),
-                getFormatDescription(TEAM_NOT_FOUND.getDescription(),
+        assertResponseStatusCodeAndResponseBody(response, CODE_404.CODE, TEAM_NOT_FOUND_RESPONSE.getCode(),
+                getFormatDescription(TEAM_NOT_FOUND_RESPONSE.getDescription(),
                         String.valueOf(licenseApiModel.getLicense().getTeam()), ""));
     }
 
-    @Description("Testing API: validate response without 'contact' partition")
-    @Test()
+    @Description("Testing API: validate response without 'contact' mandatory partition")
+    @Test
     public void verifyResponseWithoutContactSectionTest() {
-        LicensesAssignObject licenseApiModel = LicensesAssignObject.builder()
-                .licenseId(Team002_INVALID_LICENSE_ID)
+        UserLicense licenseApiModel = UserLicense.builder()
+                .licenseId(Team002_EXPIRED_LICENSE_ID)
                 .build();
 
         Response response = extractApiResponse(licenseApiModel, LICENSE_ASSIGNMENT_ENDPOINT);
@@ -166,13 +167,13 @@ public class JbLicensesAssignNegativeTest extends BaseTest {
          *  we are getting HTML response structure
          * */
         Allure.addAttachment("COMMENT FOR TEST:", COMMENT_1);
-        assertResponseStatusCodeWithContentTypeValue(response, CODE_400.CODE, "application/json");
+        assertResponseStatusCodeAndContentType(response, CODE_400.CODE, "application/json");
     }
 
-    @Description("Testing API: validate response without request 'license.productCode' field")
-    @Test()
+    @Description("Testing API: validate response without mandatory 'license.productCode' field")
+    @Test
     public void verifyResponseWithoutLicenseProductCodeFieldTest() {
-        LicensesAssignObject licenseApiModel = LicensesAssignObject.builder()
+        UserLicense licenseApiModel = UserLicense.builder()
                 .license(License.builder()
                         .productCode(null)
                         .team(TEAM002_ID_CODE)
@@ -189,13 +190,13 @@ public class JbLicensesAssignNegativeTest extends BaseTest {
          *  we are getting HTML response structure
          * */
         Allure.addAttachment("COMMENT FOR TEST:", COMMENT_1);
-        assertResponseStatusCodeWithContentTypeValue(response, CODE_400.CODE, "application/json");
+        assertResponseStatusCodeAndContentType(response, CODE_400.CODE, "application/json");
     }
 
     @Description("Testing API: Payload without mandatory 'sendEmail' field")
-    @Test()
+    @Test
     public void verifyResponseWithoutSendEmailPayloadFieldTest() {
-        LicensesAssignObject licenseApiModel = LicensesAssignObject.builder()
+        UserLicense licenseApiModel = UserLicense.builder()
                 .licenseId(Team002_LICENSE_3_ID)
                 .contact(Contact.builder()
                         .build())
@@ -216,9 +217,9 @@ public class JbLicensesAssignNegativeTest extends BaseTest {
     }
 
     @Description("Testing API: Payload without mandatory 'includeOfflineActivationCode' field")
-    @Test()
+    @Test
     public void verifyResponseWithoutIncludeOfflineActivationCodePayloadFieldTest() {
-        LicensesAssignObject licenseApiModel = LicensesAssignObject.builder()
+        UserLicense licenseApiModel = UserLicense.builder()
                 .licenseId(Team002_LICENSE_4_ID)
                 .contact(Contact.builder()
                         .build())

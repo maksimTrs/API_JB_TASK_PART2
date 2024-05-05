@@ -16,6 +16,8 @@
 
 ##### To start tests via maven wrapper with TestNG  on MAC, run command:
 
+`chmod +x mvnw`  (to add permissions to execute maven wrapper)
+
 `./mvnw -DsuiteXmlFile='AssignLicensesApiTests.xml' clean test`
 
 `./mvnw -DsuiteXmlFile='ChangeLicensesTeamApiTests.xml' clean test`
