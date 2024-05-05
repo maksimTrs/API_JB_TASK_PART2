@@ -1,11 +1,14 @@
 package utils;
 
+
 import io.qameta.allure.Allure;
+import io.qameta.allure.Param;
 import io.qameta.allure.Step;
 import io.restassured.response.Response;
 
 import java.util.List;
 
+import static io.qameta.allure.model.Parameter.Mode.HIDDEN;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class AssertionHelper {
@@ -16,7 +19,8 @@ public class AssertionHelper {
     private static final String LICENSES_IDS_JSON_PATH = "licenseIds";
 
     @Step("Assert response status code: {expectedStatusCode} and empty body")
-    public static void assertResponseStatusCodeAndEmptyBody(Response response, int expectedStatusCode) {
+    public static void assertResponseStatusCodeAndEmptyBody(@Param(name = "response", mode = HIDDEN) Response response,
+                                                            int expectedStatusCode) {
         try {
             assertThat(response.statusCode()).isEqualTo(expectedStatusCode);
             assertThat(response.getBody().asString()).isEmpty();
@@ -31,7 +35,8 @@ public class AssertionHelper {
     }
 
     @Step("Assert response status code: {expectedStatusCode} and content type: {expectedContentType}")
-    public static void assertResponseStatusCodeAndContentType(Response response, int expectedStatusCode,
+    public static void assertResponseStatusCodeAndContentType(@Param(name = "response", mode = HIDDEN) Response response,
+                                                              int expectedStatusCode,
                                                               String expectedContentType) {
         try {
             assertThat(response.statusCode()).isEqualTo(expectedStatusCode);
@@ -43,13 +48,15 @@ public class AssertionHelper {
             Allure.attachment("Actual status code:", String.valueOf(response.statusCode()));
             Allure.attachment("Expected content type:", expectedContentType);
             Allure.attachment("Actual content type:", response.getHeader(HEADER_CONTENT_TYPE));
+            Allure.attachment("Actual response body:", String.valueOf(response.getBody().asString()));
             throw e;
         }
     }
 
     @Step("Assert response status code: {expectedStatusCode} and code: {expectedCodeMessage} " +
             "and description: {expectedDescriptionMessage}")
-    public static void assertResponseStatusCodeAndResponseBody(Response response, int expectedStatusCode,
+    public static void assertResponseStatusCodeAndResponseBody(@Param(name = "response", mode = HIDDEN) Response response,
+                                                               int expectedStatusCode,
                                                                String expectedCodeMessage, String expectedDescriptionMessage) {
         try {
             assertThat(response.statusCode()).isEqualTo(expectedStatusCode);
@@ -67,7 +74,8 @@ public class AssertionHelper {
     }
 
     @Step("Assert response status code: {expectedStatusCode} and licenseIds: {expectedLicenseIds}")
-    public static void assertResponseStatusCodeAndLicenseIds(Response response, int expectedStatusCode,
+    public static void assertResponseStatusCodeAndLicenseIds(@Param(name = "response", mode = HIDDEN) Response response,
+                                                             int expectedStatusCode,
                                                              List<String> expectedLicenseIds) {
 
         assertThat(response.statusCode()).isEqualTo(expectedStatusCode);
