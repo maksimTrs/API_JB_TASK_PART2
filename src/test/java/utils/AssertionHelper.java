@@ -1,7 +1,6 @@
 package utils;
 
 
-import io.qameta.allure.Allure;
 import io.qameta.allure.Param;
 import io.qameta.allure.Step;
 import io.restassured.response.Response;
@@ -21,36 +20,22 @@ public class AssertionHelper {
     @Step("Assert response status code: {expectedStatusCode} and empty body")
     public static void assertResponseStatusCodeAndEmptyBody(@Param(name = "response", mode = HIDDEN) Response response,
                                                             int expectedStatusCode) {
-        try {
-            assertThat(response.statusCode()).isEqualTo(expectedStatusCode);
-            assertThat(response.getBody().asString()).isEmpty();
-        } catch (AssertionError e) {
-            Allure.step("Assertion failed: Actual value does not match expected value: ");
-
-            Allure.attachment("Expected status code:", String.valueOf(expectedStatusCode));
-            Allure.attachment("Actual status code:", String.valueOf(response.statusCode()));
-            Allure.attachment("Actual body:", response.getBody().asString());
-            throw e;
-        }
+        assertThat(response.statusCode())
+                .withFailMessage("Response status code is not " + expectedStatusCode)
+                .isEqualTo(expectedStatusCode);
+        assertThat(response.getBody().asString()).withFailMessage("Response body is not empty").isEmpty();
     }
 
     @Step("Assert response status code: {expectedStatusCode} and content type: {expectedContentType}")
     public static void assertResponseStatusCodeAndContentType(@Param(name = "response", mode = HIDDEN) Response response,
                                                               int expectedStatusCode,
                                                               String expectedContentType) {
-        try {
-            assertThat(response.statusCode()).isEqualTo(expectedStatusCode);
-            assertThat(response.getHeader(HEADER_CONTENT_TYPE)).contains(expectedContentType);
-        } catch (AssertionError e) {
-            Allure.step("Assertion failed: Actual value does not match expected value: ");
-
-            Allure.attachment("Expected status code:", String.valueOf(expectedStatusCode));
-            Allure.attachment("Actual status code:", String.valueOf(response.statusCode()));
-            Allure.attachment("Expected content type:", expectedContentType);
-            Allure.attachment("Actual content type:", response.getHeader(HEADER_CONTENT_TYPE));
-            Allure.attachment("Actual response body:", response.getBody().asString());
-            throw e;
-        }
+        assertThat(response.statusCode())
+                .withFailMessage("Response status code is not " + expectedStatusCode)
+                .isEqualTo(expectedStatusCode);
+        assertThat(response.getHeader(HEADER_CONTENT_TYPE))
+                .withFailMessage("Response content type is not " + expectedContentType)
+                .contains(expectedContentType);
     }
 
     @Step("Assert response status code: {expectedStatusCode} and code: {expectedCodeMessage} " +
@@ -58,19 +43,15 @@ public class AssertionHelper {
     public static void assertResponseStatusCodeAndResponseBody(@Param(name = "response", mode = HIDDEN) Response response,
                                                                int expectedStatusCode,
                                                                String expectedCodeMessage, String expectedDescriptionMessage) {
-        try {
-            assertThat(response.statusCode()).isEqualTo(expectedStatusCode);
-            assertThat(response.jsonPath().get(CODE_JSON_PATH).toString()).isEqualTo(expectedCodeMessage);
-            assertThat(response.jsonPath().get(DESCRIPTION_JSON_PATH).toString()).isEqualTo(expectedDescriptionMessage);
-        } catch (AssertionError e) {
-            Allure.step("Assertion failed: Actual value does not match expected value: ");
-
-            Allure.attachment("Expected code message:", expectedCodeMessage);
-            Allure.attachment("Actual code message:", response.jsonPath().get(CODE_JSON_PATH).toString());
-            Allure.attachment("Expected description message:", expectedDescriptionMessage);
-            Allure.attachment("Actual description message:", response.jsonPath().get(DESCRIPTION_JSON_PATH).toString());
-            throw e;
-        }
+        assertThat(response.statusCode())
+                .withFailMessage("Response status code is not " + expectedStatusCode)
+                .isEqualTo(expectedStatusCode);
+        assertThat(response.jsonPath().get(CODE_JSON_PATH).toString())
+                .withFailMessage("code message is not " + expectedCodeMessage)
+                .isEqualTo(expectedCodeMessage);
+        assertThat(response.jsonPath().get(DESCRIPTION_JSON_PATH).toString())
+                .withFailMessage("Description message is not " + expectedDescriptionMessage)
+                .isEqualTo(expectedDescriptionMessage);
     }
 
     @Step("Assert response status code: {expectedStatusCode} and licenseIds: {expectedLicenseIds}")
@@ -78,21 +59,19 @@ public class AssertionHelper {
                                                              int expectedStatusCode,
                                                              List<String> expectedLicenseIds) {
 
-        assertThat(response.statusCode()).isEqualTo(expectedStatusCode);
-        try {
-            List<String> actualLicenseIds = response.jsonPath().getList(LICENSES_IDS_JSON_PATH, String.class);
+        assertThat(response.statusCode())
+                .withFailMessage("Response status code is not " + expectedStatusCode)
+                .isEqualTo(expectedStatusCode);
 
-            if (expectedLicenseIds.isEmpty()) {
-                assertThat(actualLicenseIds).isEmpty();
-            } else {
-                // Compare the actual list with the expected list
-                assertThat(actualLicenseIds).containsExactlyInAnyOrderElementsOf(expectedLicenseIds);
-            }
-        } catch (AssertionError e) {
-            Allure.step("Assertion failed: Actual value does not match expected value: ");
+        List<String> actualLicenseIds = response.jsonPath().getList(LICENSES_IDS_JSON_PATH, String.class);
 
-            Allure.attachment("Expected lLicense Ids list:", expectedLicenseIds.toString());
-            throw e;
+        if (expectedLicenseIds.isEmpty()) {
+            assertThat(actualLicenseIds).withFailMessage("Response body is not empty").isEmpty();
+        } else {
+            // Compare the actual list with the expected list
+            assertThat(actualLicenseIds)
+                    .withFailMessage("Response licenseIds is not " + expectedLicenseIds)
+                    .containsExactlyInAnyOrderElementsOf(expectedLicenseIds);
         }
     }
 }
